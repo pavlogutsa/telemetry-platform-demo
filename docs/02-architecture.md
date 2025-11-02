@@ -24,48 +24,71 @@ This design showcases:
 ## 2. High-Level Architecture Diagram
 
 ```mermaid
-flowchart TB
-    subgraph EX["External"]
-        D[Device Agent<br>(any OS)] -->|POST /api/telemetry| GW[NGINX Ingress / API Gateway]
+flowchart LR
+
+    %% External devices hit the gateway
+    subgraph "External"
+        D[Device Agent<br/>(any OS)]
     end
 
-    subgraph ING["Ingestion Layer"]
-        GW --> AI[agent-ingest-svc<br>REST → Kafka Producer]
+    subgraph "Ingress / API Gateway"
+        GW[NGINX Ingress<br/>+ Routing + Auth]
     end
 
-    subgraph STREAM["Streaming Core"]
-        AI -->|telemetry.raw| K[(Kafka Broker)]
-        K --> TP[telemetry-processor-svc<br>Kafka Consumer + Redis Throttle]
+    subgraph "Ingestion Layer"
+        AI[agent-ingest-svc<br/>Spring Boot 3<br/>REST → Kafka Producer]
     end
 
-    subgraph DB["Persistence"]
-        TP -->|upsert current| OC[(Oracle device_status_current)]
-        TP -->|append history| OH[(Oracle device_status_history)]
+    subgraph "Streaming Core"
+        K[(Kafka Broker)]
+        TP[telemetry-processor-svc<br/>Kafka Consumer<br/>Redis throttle/dedupe]
+        RD[(Redis)]
     end
 
-    subgraph READ["Read API"]
-        DS[device-state-svc<br>REST Reader] --> OC
-        DS --> OH
-        GW -->|/api/devices/*| DS
+    subgraph "Persistence"
+        OC[(Oracle<br/>device_status_current)]
+        OH[(Oracle<br/>device_status_history)]
     end
 
-    subgraph OBS["Observability"]
-        TP -->|/actuator/prometheus| PM[Prometheus]
-        AI -->|metrics| PM
-        DS -->|metrics| PM
-        PM --> GF[Grafana Dashboards]
+    subgraph "Read API Layer"
+        DS[device-state-svc<br/>Spring Boot 3<br/>Status & History REST API]
     end
 
+    subgraph "Observability"
+        PM[Prometheus<br/>scrapes /actuator/prometheus]
+        GF[Grafana<br/>dashboards]
+    end
+
+    %% Data flow arrows
+    D -->|POST /api/telemetry| GW --> AI
+    AI -->|publish telemetry.raw| K
+    K -->|consume telemetry.raw| TP
+    TP -->|throttle & dedupe| RD
+    TP -->|upsert latest| OC
+    TP -->|append history| OH
+    DS -->|read latest| OC
+    DS -->|read history| OH
+    GW -->|/api/devices/*| DS
+
+    %% Observability
+    AI -->|metrics| PM
+    TP -->|metrics| PM
+    DS -->|metrics| PM
+    PM --> GF
+
+    %% Styling
     style D fill:#e6ecff,stroke:#4059ff
     style GW fill:#f0f3ff,stroke:#3a3ad8
     style AI fill:#d8efff,stroke:#007acc
     style K fill:#fff1c2,stroke:#c7a500
     style TP fill:#ffd9d9,stroke:#d32f2f
+    style RD fill:#ffe5ff,stroke:#993399
     style OC fill:#d5ffd5,stroke:#00a000
     style OH fill:#d5ffd5,stroke:#00a000
     style DS fill:#e6f0ff,stroke:#0055cc
     style PM fill:#fff8d5,stroke:#a68c00
     style GF fill:#fff8d5,stroke:#a68c00
+
 ```
 
 ---
