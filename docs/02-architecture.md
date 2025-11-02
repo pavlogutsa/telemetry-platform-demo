@@ -1,40 +1,158 @@
 # Architecture
 
-## High-level flow (Release 2+)
+The Telemetry Platform simulates a modern endpoint-monitoring system similar to NinjaOne.  
+It is built as a **microservices architecture** using Java 21 and Spring Boot 3, deployed on Kubernetes, with Kafka for messaging and Oracle DB for persistence.
+
+---
+
+## 1. System Overview
+
+The platform collects telemetry data (CPU, memory, disk, process list, etc.) from distributed device agents.  
+Each agent periodically posts telemetry via REST; the data is normalized, streamed through Kafka, stored in Oracle for historical analysis, and exposed via REST APIs for operators or dashboards.
+
+This design showcases:
+
+- Reactive, asynchronous message flow through **Kafka**  
+- Stateless ingestion and scalable processing  
+- Deployment orchestration via **Kubernetes + Helm**  
+- Distributed coordination with **Redis**  
+- Observability using **Prometheus + Grafana**  
+- CI/CD and documentation as code via GitHub Actions + MkDocs
+
+---
+
+## 2. High-Level Architecture Diagram
 
 ```mermaid
-graph LR
-  Device[Device Agent] -->|POST /api/telemetry| Ingest[agent-ingest-svc]
-  Ingest -->|publish telemetry.raw| Kafka[(Kafka)]
-  Kafka --> Proc[telemetry-processor-svc]
-  Proc -->|Redis throttle/dedupe| Redis[(Redis)]
-  Proc -->|write latest + history| Oracle[(Oracle DB)]
-  Oracle --> State[device-state-svc]
-  State -->|GET /api/devices/{id}/status| Operator[Operator / Dashboard]
-  State -->|GET /api/devices/{id}/history| Operator
+flowchart TB
+    subgraph EX["External"]
+        D[Device Agent<br>(any OS)] -->|POST /api/telemetry| GW[NGINX Ingress / API Gateway]
+    end
+
+    subgraph ING["Ingestion Layer"]
+        GW --> AI[agent-ingest-svc<br>REST → Kafka Producer]
+    end
+
+    subgraph STREAM["Streaming Core"]
+        AI -->|telemetry.raw| K[(Kafka Broker)]
+        K --> TP[telemetry-processor-svc<br>Kafka Consumer + Redis Throttle]
+    end
+
+    subgraph DB["Persistence"]
+        TP -->|upsert current| OC[(Oracle device_status_current)]
+        TP -->|append history| OH[(Oracle device_status_history)]
+    end
+
+    subgraph READ["Read API"]
+        DS[device-state-svc<br>REST Reader] --> OC
+        DS --> OH
+        GW -->|/api/devices/*| DS
+    end
+
+    subgraph OBS["Observability"]
+        TP -->|/actuator/prometheus| PM[Prometheus]
+        AI -->|metrics| PM
+        DS -->|metrics| PM
+        PM --> GF[Grafana Dashboards]
+    end
+
+    style D fill:#e6ecff,stroke:#4059ff
+    style GW fill:#f0f3ff,stroke:#3a3ad8
+    style AI fill:#d8efff,stroke:#007acc
+    style K fill:#fff1c2,stroke:#c7a500
+    style TP fill:#ffd9d9,stroke:#d32f2f
+    style OC fill:#d5ffd5,stroke:#00a000
+    style OH fill:#d5ffd5,stroke:#00a000
+    style DS fill:#e6f0ff,stroke:#0055cc
+    style PM fill:#fff8d5,stroke:#a68c00
+    style GF fill:#fff8d5,stroke:#a68c00
 ```
 
-## Components
+---
+
+## 3. Component Breakdown
 
 ### agent-ingest-svc
 
-Accepts telemetry from devices (REST), pushes to Kafka.
+Entry point for telemetry ingestion.
+
+- Exposes `POST /api/telemetry`.
+- Stateless Spring Boot 3 REST app producing to Kafka.
+- Scales horizontally behind NGINX ingress.
 
 ### telemetry-processor-svc
 
-Consumes raw telemetry, normalizes, throttles via Redis, writes "current" and "timeseries" views.
+Consumes `telemetry.raw` from Kafka.
+
+- Normalizes and validates messages.
+- Uses Redis for throttling and deduplication.
+- Writes to Oracle tables: `device_status_current` and `device_status_history`.
+- Publishes compacted topic `telemetry.latest` and append-only `telemetry.timeseries`.
 
 ### device-state-svc
 
-REST read API for current status and historical data. Reads from Oracle.
+Exposes device state via REST (`/api/devices/{id}/status`, `/history`).
 
-### Kafka / Redis / Oracle
+- Reads Oracle tables; optional Redis cache.
+- Provides JSON APIs for operators or dashboards.
 
-Infrastructure services in the cluster.
+### Redis
 
-### NGINX Ingress
+Distributed cache for deduplication and throttling windows.
 
-Acts as API gateway. Routes:
+- Future: read caching and API-level rate limiting.
 
-- `/api/telemetry` -> agent-ingest-svc
-- `/api/devices/**` -> device-state-svc
+### Kafka
+
+Backbone of event-driven communication.
+
+- Topics: `telemetry.raw`, `telemetry.latest`, `telemetry.timeseries`.
+- Schema Registry added in Release 4.
+
+### Oracle DB
+
+Stores processed telemetry.
+
+- `device_status_current` – one record per device.
+- `device_status_history` – append-only time series.
+- Indexed by `(device_id, timestamp)`.
+
+### NGINX Ingress / API Gateway
+
+Routes traffic to backend services.
+
+- Provides load balancing and TLS termination.
+- Adds authentication headers from Release 5 onward.
+
+---
+
+## 4. Data Flow Summary
+
+1. Device posts telemetry → agent-ingest-svc.
+2. agent-ingest-svc produces `telemetry.raw` to Kafka.
+3. telemetry-processor-svc consumes, throttles, writes to Oracle.
+4. device-state-svc exposes results via REST.
+5. Prometheus/Grafana collect runtime metrics.
+
+---
+
+## 5. Scalability & Resilience
+
+- **agent-ingest-svc** scales via Kubernetes HPA.
+- **Kafka** absorbs load spikes; decouples ingestion from processing.
+- **Redis** prevents overload through throttling.
+- Health and metrics exposed via Actuator endpoints.
+- Rolling upgrades handled via Helm charts.
+- Integration tests validate pipelines with Testcontainers.
+
+---
+
+## 6. Release Evolution
+
+| Release | Key Additions |
+|---------|---------------|
+| R1 | Basic REST ingestion → Oracle direct |
+| R2 | Introduced Kafka + telemetry-processor-svc |
+| R3 | Added Redis throttling + history |
+| R4 | Added Schema Registry + Debezium CDC |
+| R5 | API-key auth + complete observability |
