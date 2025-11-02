@@ -18,10 +18,13 @@ nav:
   - Release Roadmap: docs/09-release-roadmap.md
   - Future Notes: docs/10-future-notes.md
 
+plugins:
+  - search
+  - mermaid2
+
 markdown_extensions:
   - admonition
   - codehilite
   - toc:
       permalink: true
   - pymdownx.superfences
-  - pymdownx.mermaid
