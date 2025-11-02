@@ -30,3 +30,7 @@ markdown_extensions:
   - pymdownx.superfences
 
 use_directory_urls: false
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js
+  - js/mermaid-init.js
