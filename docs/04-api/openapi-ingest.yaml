@@ -1,0 +1,45 @@
+openapi: 3.0.3
+info:
+  title: Telemetry Ingest API
+  version: "0.1.0"
+paths:
+  /api/telemetry:
+    post:
+      summary: Submit telemetry for a device
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [deviceId, cpu, mem, timestamp]
+              properties:
+                deviceId:
+                  type: string
+                cpu:
+                  type: number
+                  format: float
+                mem:
+                  type: number
+                  format: float
+                timestamp:
+                  type: string
+                  format: date-time
+                processes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      cpu:
+                        type: number
+                        format: float
+                      mem:
+                        type: number
+                        format: float
+      responses:
+        "202":
+          description: Accepted for processing
+        "400":
+          description: Invalid payload
