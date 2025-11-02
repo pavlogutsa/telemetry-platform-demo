@@ -4,6 +4,9 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: write    # <-- let github-actions[bot] push to gh-pages
+
 jobs:
   build-deploy-docs:
     runs-on: ubuntu-latest
@@ -15,7 +18,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+            python-version: "3.12"
 
       - name: Install MkDocs + plugins
         run: |
@@ -28,9 +31,11 @@ jobs:
       - name: Build site
         run: mkdocs build --strict
 
+      # Publish the contents of ./site to gh-pages branch
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: site
+          force_orphan: true
