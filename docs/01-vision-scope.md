@@ -1,7 +1,7 @@
 # Vision & Scope
 
 ## Purpose
-The Telemetry Platform is a simulated endpoint-monitoring system inspired by NinjaOne.  
+The Telemetry Platform is a simulated endpoint-monitoring system.  
 Its goal is to demonstrate a production-grade cloud backend architecture using **Java 21**, **Spring Boot 3**, **Kafka**, **Redis**, **Oracle**, and **Kubernetes**, packaged with full CI/CD and documentation pipelines.
 
 ## Objectives

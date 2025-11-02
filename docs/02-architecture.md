@@ -1,6 +1,6 @@
 # Architecture
 
-The Telemetry Platform simulates a modern endpoint-monitoring system similar to NinjaOne.  
+The Telemetry Platform simulates a modern endpoint-monitoring system.  
 It is built as a **microservices architecture** using Java 21 and Spring Boot 3, deployed on Kubernetes, with Kafka for messaging and Oracle DB for persistence.
 
 ---
