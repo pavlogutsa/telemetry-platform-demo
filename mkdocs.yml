@@ -4,19 +4,19 @@ theme:
   name: material
 
 nav:
-  - Overview: docs/index.md
-  - Vision & Scope: docs/01-vision-scope.md
-  - Architecture: docs/02-architecture.md
-  - Data & Messaging: docs/03-data-design.md
+  - Overview: index.md
+  - Vision & Scope: 01-vision-scope.md
+  - Architecture: 02-architecture.md
+  - Data & Messaging: 03-data-design.md
   - API:
-      - Ingest API: docs/04-api/openapi-ingest.yaml
-      - Device State API: docs/04-api/openapi-device-state.yaml
-  - Infrastructure: docs/05-infrastructure.md
-  - Testing: docs/06-testing-strategy.md
-  - Observability: docs/07-observability.md
-  - Security: docs/08-security.md
-  - Release Roadmap: docs/09-release-roadmap.md
-  - Future Notes: docs/10-future-notes.md
+      - Ingest API: 04-api/openapi-ingest.yaml
+      - Device State API: 04-api/openapi-device-state.yaml
+  - Infrastructure: 05-infrastructure.md
+  - Testing: 06-testing-strategy.md
+  - Observability: 07-observability.md
+  - Security: 08-security.md
+  - Release Roadmap: 09-release-roadmap.md
+  - Future Notes: 10-future-notes.md
 
 plugins:
   - search
