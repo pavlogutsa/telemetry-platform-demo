@@ -1,0 +1,38 @@
+# Oracle subchart values (optimized and persistence-enabled)
+# These can be overridden by the parent telemetry-platform chart via .Values.global.oracle.*
+
+replicaCount: 1
+
+image:
+  repository: gvenzl/oracle-xe
+  tag: "21-slim"
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 1Gi
+
+service:
+  type: ClusterIP
+  port: 1521
+
+persistence:
+  enabled: true               # persistence ON by default
+  size: 10Gi
+  storageClass: ""            # leave empty to use the cluster default
+  accessModes:
+    - ReadWriteOnce
+  existingClaim: ""           # reuse an existing PVC if provided
+
+env:
+  # Mirrors global.oracle but allows local overrides for standalone use
+  user: telemetry
+  password: telemetry_pw
+  jdbcUrl: jdbc:oracle:thin:@oracle-db.telemetry.svc.cluster.local:1521/XEPDB1
+
+labels: {}
+annotations: {}

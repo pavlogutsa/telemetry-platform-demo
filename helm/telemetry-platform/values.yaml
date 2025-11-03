@@ -1,0 +1,14 @@
+global:
+  namespace: telemetry
+  oracle:
+    password: telemetry_pw
+    user: telemetry
+    jdbc_url: jdbc:oracle:thin:@oracle-db.telemetry.svc.cluster.local:1521/XEPDB1
+
+agentIngest:
+  image: agent-ingest-svc:release1
+  replicas: 2
+
+deviceState:
+  image: device-state-svc:release1
+  replicas: 1

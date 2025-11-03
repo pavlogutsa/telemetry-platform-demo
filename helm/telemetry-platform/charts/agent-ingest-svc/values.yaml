@@ -1,0 +1,4 @@
+# Default values for agent-ingest-svc
+image: agent-ingest-svc:release1
+replicas: 2
+resources: {}

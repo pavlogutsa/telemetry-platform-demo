@@ -1,0 +1,17 @@
+apiVersion: v2
+name: telemetry-platform
+description: Telemetry Platform full stack
+version: 0.1.0
+dependencies:
+  - name: oracle
+    version: 0.1.0
+    repository: file://charts/oracle
+  - name: agent-ingest-svc
+    version: 0.1.0
+    repository: file://charts/agent-ingest-svc
+  - name: device-state-svc
+    version: 0.1.0
+    repository: file://charts/device-state-svc
+  - name: ingress
+    version: 0.1.0
+    repository: file://charts/ingress

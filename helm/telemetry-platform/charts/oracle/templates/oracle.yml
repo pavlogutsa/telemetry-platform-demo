@@ -1,0 +1,122 @@
+{{- $fullName := "oracle-db" -}}
+
+# ---------------------------------------------------------------------------
+# Secret for credentials
+# ---------------------------------------------------------------------------
+apiVersion: v1
+kind: Secret
+metadata:
+  name: oracle-credentials
+  namespace: {{ .Values.global.namespace }}
+type: Opaque
+stringData:
+  ORACLE_PASSWORD: {{ default .Values.env.password .Values.global.oracle.password }}
+  ORACLE_USER: {{ default .Values.env.user .Values.global.oracle.user }}
+  ORACLE_JDBC_URL: {{ default .Values.env.jdbcUrl .Values.global.oracle.jdbc_url }}
+
+---
+
+# ---------------------------------------------------------------------------
+# PersistentVolumeClaim (created only if persistence.enabled = true
+# and no existingClaim is defined)
+# ---------------------------------------------------------------------------
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $fullName }}-pvc
+  namespace: {{ .Values.global.namespace }}
+spec:
+  accessModes: {{ toYaml .Values.persistence.accessModes | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size }}
+  {{- if .Values.persistence.storageClass }}
+  storageClassName: {{ .Values.persistence.storageClass }}
+  {{- end }}
+{{- end }}
+
+---
+
+# ---------------------------------------------------------------------------
+# StatefulSet for Oracle XE
+# ---------------------------------------------------------------------------
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $fullName }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ $fullName }}
+spec:
+  serviceName: {{ $fullName }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ $fullName }}
+  template:
+    metadata:
+      labels:
+        app: {{ $fullName }}
+    spec:
+      containers:
+        - name: oracle
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: ORACLE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: oracle-credentials
+                  key: ORACLE_PASSWORD
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              name: sql
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: oracle-data
+              mountPath: /opt/oracle/oradata
+  volumeClaimTemplates:
+    {{- if .Values.persistence.enabled }}
+    - metadata:
+        name: oracle-data
+      spec:
+        accessModes: {{ toYaml .Values.persistence.accessModes | nindent 8 }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size }}
+        {{- if .Values.persistence.storageClass }}
+        storageClassName: {{ .Values.persistence.storageClass }}
+        {{- end }}
+    {{- else }}
+    - metadata:
+        name: oracle-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: ""
+        resources:
+          requests:
+            storage: 1Gi
+    {{- end }}
+
+---
+
+# ---------------------------------------------------------------------------
+# Service exposing Oracle port
+# ---------------------------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ $fullName }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: {{ $fullName }}
+  ports:
+    - name: sql
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}

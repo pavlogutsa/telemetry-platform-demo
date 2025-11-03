@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: device-state-svc
+  namespace: {{ .Values.global.namespace }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: device-state-svc
+  template:
+    metadata:
+      labels:
+        app: device-state-svc
+    spec:
+      containers:
+        - name: device-state-svc
+          image: {{ .Values.image }}
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: oracle-credentials
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: device-state-svc
+  namespace: {{ .Values.global.namespace }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/actuator/prometheus"
+    prometheus.io/port: "8080"
+spec:
+  selector:
+    app: device-state-svc
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http
