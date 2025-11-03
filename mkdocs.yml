@@ -1,5 +1,6 @@
 site_name: Telemetry Platform
 repo_url: https://github.com/pavlogutsa/telemetry-platform-demo
+
 theme:
   name: material
 
@@ -27,10 +28,10 @@ markdown_extensions:
   - codehilite
   - toc:
       permalink: true
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid
 
 use_directory_urls: false
-
-extra_javascript:
-  - https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js
-  - js/mermaid-init.js
