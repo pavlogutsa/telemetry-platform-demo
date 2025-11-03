@@ -1,1 +1,4 @@
 site/*
+.gradle/*
+agent-ingest-svc/build/*
+build/*
