@@ -60,7 +60,8 @@ flowchart LR
     end
 
     %% Data flow arrows
-    D -->|POST /api/telemetry| GW --> AI
+    D -->|POST /api/telemetry| GW
+    GW --> AI
     AI -->|publish telemetry.raw| K
     K -->|consume telemetry.raw| TP
     TP -->|throttle & dedupe| RD
