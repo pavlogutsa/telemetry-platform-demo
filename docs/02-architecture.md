@@ -25,20 +25,20 @@ This design showcases:
 
 ```mermaid
 flowchart LR
-  D[Device Agent\n(any OS)] -->|POST /api/telemetry| GW[NGINX Ingress / API Gateway]
-  GW --> AI[agent-ingest-svc\nREST → Kafka Producer]
-  AI -->|telemetry.raw| K[(Kafka Broker)]
-  K --> TP[telemetry-processor-svc\nKafka Consumer\nRedis throttle/dedupe]
-  TP --> RD[(Redis Cache)]
-  TP -->|latest state| OC[(Oracle\ndevice_status_current)]
-  TP -->|history| OH[(Oracle\ndevice_status_history)]
-  GW -->|/api/devices/*| DS[device-state-svc\nStatus & History API]
+  D["Device Agent"] --> GW["NGINX Ingress / API Gateway"]
+  GW --> AI["agent-ingest-svc (REST to Kafka)"]
+  AI --> K["Kafka"]
+  K --> TP["telemetry-processor-svc"]
+  TP --> RD["Redis"]
+  TP --> OC["Oracle current"]
+  TP --> OH["Oracle history"]
+  GW --> DS["device-state-svc"]
   DS --> OC
   DS --> OH
-  AI --> PM[Prometheus]
+  AI --> PM["Prometheus"]
   TP --> PM
   DS --> PM
-  PM --> GF[Grafana]
+  PM --> GF["Grafana"]
 
 ```
 
