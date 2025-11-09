@@ -3,10 +3,21 @@ spring:
     name: agent-ingest-svc
   kafka:
     bootstrap-servers: localhost:9092
+  datasource:
+    url: ${ORACLE_JDBC_URL}
+    username: ${ORACLE_USER}
+    password: ${ORACLE_PASSWORD}
+    driver-class-name: oracle.jdbc.OracleDriver
+
 server:
-  port: 8081
+  port: 8080
+
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,metrics,prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+
