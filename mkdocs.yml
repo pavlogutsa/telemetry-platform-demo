@@ -12,6 +12,8 @@ nav:
   - API:
       - Ingest API: 04-api/openapi-ingest.yaml
       - Device State API: 04-api/openapi-device-state.yaml
+  - Specs:
+      - Release 1 Spec: 11-release1-spec.md
   - Infrastructure: 05-infrastructure.md
   - Testing: 06-testing-strategy.md
   - Observability: 07-observability.md

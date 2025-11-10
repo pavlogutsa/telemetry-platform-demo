@@ -244,7 +244,7 @@ Example output:
 
 ---
 
-## 7. 🧭 Next Steps
+## 7. Next Steps
 
 1. Review architecture in [`docs/02-architecture.md`](./docs/02-architecture.md)  
 2. Inspect Helm values under `helm/telemetry-platform/`  
