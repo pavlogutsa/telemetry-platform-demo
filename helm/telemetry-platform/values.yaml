@@ -5,10 +5,15 @@ global:
     user: telemetry
     jdbc_url: jdbc:oracle:thin:@oracle-db.telemetry.svc.cluster.local:1521/XEPDB1
 
-agentIngest:
+agent-ingest-svc:
   image: agent-ingest-svc:release1
   replicas: 2
 
-deviceState:
+device-state-svc:
   image: device-state-svc:release1
   replicas: 1
+  containerPort: 8081
+  servicePort: 8080
+
+ingress:
+  host: telemetry.local

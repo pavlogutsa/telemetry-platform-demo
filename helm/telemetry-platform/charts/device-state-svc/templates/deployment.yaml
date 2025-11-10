@@ -21,11 +21,11 @@ spec:
             - secretRef:
                 name: oracle-credentials
           ports:
-            - containerPort: 8080
+            - containerPort: {{ .Values.containerPort }}
           readinessProbe:
             httpGet:
               path: /actuator/health
-              port: 8080
+              port: {{ .Values.containerPort }}
             initialDelaySeconds: 5
             periodSeconds: 5
 ---
@@ -42,6 +42,6 @@ spec:
   selector:
     app: device-state-svc
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: {{ .Values.servicePort }}
+      targetPort: {{ .Values.containerPort }}
       name: http

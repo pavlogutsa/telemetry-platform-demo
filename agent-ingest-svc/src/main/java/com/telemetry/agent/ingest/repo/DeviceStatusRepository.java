@@ -1,4 +1,4 @@
-package com.example.ingest.repo;
+package com.telemetry.agent.ingest.repo;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -17,7 +17,7 @@ public class DeviceStatusRepository {
                              double cpuPct,
                              double memPct,
                              boolean diskAlert,
-                             Instant ts) {
+                             Instant timestamp) {
 
         int updated = jdbc.update("""
             UPDATE telemetry.device_status_current

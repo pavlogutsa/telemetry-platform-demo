@@ -1,4 +1,4 @@
-package com.example.ingest.api;
+package com.telemetry.agent.ingest.api;
 
 import java.time.Instant;
 import java.util.List;

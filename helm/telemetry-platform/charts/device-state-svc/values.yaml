@@ -1,3 +1,5 @@
 image: device-state-svc:release1
 replicas: 1
+containerPort: 8081
+servicePort: 8080
 resources: {}

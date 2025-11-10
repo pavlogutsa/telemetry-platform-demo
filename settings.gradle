@@ -1,3 +1,4 @@
 rootProject.name = "telemetry-platform-demo"
 
 include("agent-ingest-svc")
+include("device-state-svc")

@@ -1,10 +1,10 @@
-# 🧰 Local Environment Setup (Intel Mac)
+# Local Environment Setup (Intel Mac)
 
 This guide helps a new developer set up a full local environment for the **Telemetry Platform Demo** project on an **Intel-based macOS** system using **Docker Desktop**.
 
 ---
 
-## 1. 🧩 Prerequisites
+## 1. Prerequisites
 
 ### 1.1 System
 - macOS 12 Monterey or newer (Intel chip)
@@ -23,7 +23,7 @@ brew update
 
 ---
 
-## 2. 🧱 Core Development Tools
+## 2. Core Development Tools
 
 ### 2.1 Git
 ```bash
@@ -140,7 +140,7 @@ Recommended extensions:
 
 ---
 
-## 3. 🗄️ Supporting Infrastructure (Optional Local Setup)
+## 3. Supporting Infrastructure (Optional Local Setup)
 
 ### 3.1 Oracle Database (Docker)
 ```bash
@@ -179,7 +179,7 @@ docker compose -f docker-compose.kafka.yml up -d
 
 ---
 
-## 4. 🧩 Project Setup
+## 4. Project Setup
 
 ### 4.1 Clone Repository
 ```bash
@@ -205,7 +205,7 @@ Then run the Spring Boot task shown.
 
 ---
 
-## 5. 🌐 Documentation Site
+## 5. Documentation Site
 
 To preview documentation locally:
 ```bash
@@ -222,91 +222,11 @@ mkdocs build --strict
 
 ---
 
-## 6. 🔍 Verification Script
+## 6. Verification Script
 
 Once everything is installed, run the environment validation script below to make sure your setup is correct.
 
-Create a file named `setup_check.sh` in the project root and paste the following content:
-
 ```bash
-#!/bin/bash
-# ============================================================
-# 🧰 Telemetry Platform Demo - Environment Verification Script
-# For Intel Mac local setup
-# ============================================================
-
-# Colors
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
-
-check() {
-  local cmd=$1
-  local name=$2
-  if command -v "$cmd" >/dev/null 2>&1; then
-    echo -e "${GREEN}✅ $name found:${NC} $($cmd --version 2>/dev/null | head -n 1)"
-  else
-    echo -e "${RED}❌ $name not found${NC}"
-  fi
-}
-
-echo "------------------------------------------------------------"
-echo "🔍 Telemetry Platform Demo - Environment Check"
-echo "------------------------------------------------------------"
-
-# Core tools
-check java "Java (JDK)"
-check gradle "Gradle"
-check git "Git"
-check docker "Docker"
-check kind "Kind (Kubernetes)"
-check kubectl "kubectl"
-check helm "Helm"
-check python3 "Python3"
-check mkdocs "MkDocs"
-
-# Additional checks
-echo
-echo "------------------------------------------------------------"
-echo "🧱 Infrastructure Containers Check"
-echo "------------------------------------------------------------"
-
-for svc in oracle redis kafka; do
-  if docker ps --format '{{.Names}}' | grep -q "$svc"; then
-    echo -e "${GREEN}✅ $svc container is running${NC}"
-  else
-    echo -e "${YELLOW}⚠️  $svc container not found or not running${NC}"
-  fi
-done
-
-echo
-echo "------------------------------------------------------------"
-echo "📦 Project Gradle Build Check"
-echo "------------------------------------------------------------"
-
-if [ -f "./gradlew" ]; then
-  ./gradlew -q projects >/dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✅ Gradle wrapper works correctly${NC}"
-  else
-    echo -e "${RED}❌ Gradle wrapper failed to run${NC}"
-  fi
-else
-  echo -e "${YELLOW}⚠️  Gradle wrapper (./gradlew) not found in this directory${NC}"
-fi
-
-echo
-echo "------------------------------------------------------------"
-echo "✅ Verification Complete"
-echo "------------------------------------------------------------"
-echo -e "Review any ${RED}❌ Missing${NC} or ${YELLOW}⚠️  Warning${NC} items above."
-```
-
-Make the script executable and run it:
-
-```bash
-chmod +x setup_check.sh
 ./setup_check.sh
 ```
 
@@ -339,7 +259,7 @@ Example output:
 
 ---
 
-## 8. 💡 Troubleshooting
+## 8. Troubleshooting
 
 | Problem | Solution |
 |----------|-----------|
@@ -350,5 +270,5 @@ Example output:
 
 ---
 
-✅ **Your environment is now ready!**  
+**Your environment is now ready!**  
 You can build, run, document, and deploy the Telemetry Platform locally.

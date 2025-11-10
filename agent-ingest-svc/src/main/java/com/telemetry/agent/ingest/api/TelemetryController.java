@@ -1,6 +1,6 @@
-package com.example.ingest.api;
+package com.telemetry.agent.ingest.api;
 
-import com.example.ingest.repo.DeviceStatusRepository;
+import com.telemetry.agent.ingest.repo.DeviceStatusRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,11 +20,13 @@ public class TelemetryController {
             return ResponseEntity.badRequest().build();
         }
 
+        boolean diskAlert = body.diskAlert() != null && body.diskAlert();
+
         repo.upsertStatus(
                 body.deviceId(),
                 body.cpu(),
                 body.mem(),
-                body.diskAlert() != null && body.diskAlert(),
+                diskAlert,
                 body.timestamp()
         );
 

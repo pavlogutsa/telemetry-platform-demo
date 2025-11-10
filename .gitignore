@@ -1,4 +1,5 @@
 site/*
 .gradle/*
-agent-ingest-svc/build/*
 build/*
+agent-ingest-svc/build/*
+device-state-svc/build/*
