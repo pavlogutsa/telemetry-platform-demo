@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: Device State API
+  version: "0.1.0"
+paths:
+  /devices/{deviceId}/status:
+    get:
+      summary: Get the latest known status of a device
+      parameters:
+        - in: path
+          name: deviceId
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deviceId:
+                    type: string
+                  cpu:
+                    type: number
+                  mem:
+                    type: number
+                  diskAlert:
+                    type: boolean
+                  updatedAt:
+                    type: string
+                    format: date-time
+        "404":
+          description: Device not found
+  /devices/{deviceId}/history:
+    get:
+      summary: Get recent telemetry history for a device
+      parameters:
+        - in: path
+          name: deviceId
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 100
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Device not found
