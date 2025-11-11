@@ -830,7 +830,7 @@ This flow mirrors the contributor quickstart in `README.md`.
 
 8. **Smoke-test the APIs**
    ```bash
-   curl -X POST http://telemetry.local/api/telemetry \
+   curl -X POST http://telemetry.local/telemetry \
      -H "Content-Type: application/json" \
      -d '{
            "deviceId": "laptop-4421",
@@ -841,7 +841,7 @@ This flow mirrors the contributor quickstart in `README.md`.
            "processes": []
          }'
 
-   curl http://telemetry.local/api/devices/laptop-4421/status
+   curl http://telemetry.local/devices/laptop-4421/status
    ```
 
    Expect HTTP 200 with device telemetry JSON.

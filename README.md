@@ -254,7 +254,7 @@ Add the entry above to `/etc/hosts`.
 
 ### 5.8 Smoke-test the APIs
 ```bash
-curl -X POST http://telemetry.local/api/telemetry \
+curl -X POST http://telemetry.local/telemetry \
   -H "Content-Type: application/json" \
   -d '{
         "deviceId": "laptop-4421",
@@ -265,7 +265,7 @@ curl -X POST http://telemetry.local/api/telemetry \
         "processes": []
       }'
 
-curl http://telemetry.local/api/devices/laptop-4421/status
+curl http://telemetry.local/devices/laptop-4421/status
 ```
 
 ### 5.9 End-to-end reset script

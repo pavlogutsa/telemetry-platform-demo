@@ -9,14 +9,14 @@ spec:
     - host: {{ .Values.host | default "telemetry.local" }}
       http:
         paths:
-          - path: /api/telemetry
+          - path: /telemetry
             pathType: Prefix
             backend:
               service:
                 name: agent-ingest-svc
                 port:
                   number: 8080
-          - path: /api/devices
+          - path: /devices
             pathType: Prefix
             backend:
               service:
