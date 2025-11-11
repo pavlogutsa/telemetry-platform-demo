@@ -1,0 +1,15 @@
+dependencies:
+- name: oracle
+  repository: file://charts/oracle
+  version: 0.1.0
+- name: agent-ingest-svc
+  repository: file://charts/agent-ingest-svc
+  version: 0.1.0
+- name: device-state-svc
+  repository: file://charts/device-state-svc
+  version: 0.1.0
+- name: ingress
+  repository: file://charts/ingress
+  version: 0.1.0
+digest: sha256:c7192fc00a5e90aa3ea168aed0196e981bca008e4981b4da52d25a40deee61b8
+generated: "2025-11-11T12:12:23.599101-05:00"

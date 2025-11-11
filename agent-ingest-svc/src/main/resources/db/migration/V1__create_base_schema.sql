@@ -8,3 +8,13 @@ CREATE TABLE telemetry_event (
 CREATE INDEX idx_telemetry_event_device_created
   ON telemetry_event(device_id, created_at);
 
+CREATE TABLE device_status_current (
+  device_id   VARCHAR2(64)     PRIMARY KEY,
+  cpu_pct     NUMBER(5,2),
+  mem_pct     NUMBER(5,2),
+  disk_alert  CHAR(1)          CHECK (disk_alert IN ('Y', 'N')),
+  updated_at  TIMESTAMP        DEFAULT SYSTIMESTAMP NOT NULL
+);
+
+CREATE INDEX idx_device_status_current_updated_at
+  ON device_status_current (updated_at);
