@@ -20,6 +20,7 @@ nav:
   - Security: 08-security.md
   - Release Roadmap: 09-release-roadmap.md
   - Future Notes: 10-future-notes.md
+  - Troubleshooting: 12-troubleshooting.md
 
 plugins:
   - search

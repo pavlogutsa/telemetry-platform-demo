@@ -21,15 +21,20 @@ No Kafka, no Redis yet.
 
 ## 2. Repository Layout
 
-Ensure the following structure under repo root `telemetry-platform`:
+Ensure the following structure under repo root `telemetry-platform-demo/`:
 
 ```text
-telemetry-platform/
-  services/
-    agent-ingest-svc/
-    device-state-svc/
+telemetry-platform-demo/
+  agent-ingest-svc/
+  device-state-svc/
+  docs/
+    11-release1-spec.md
   helm/
     telemetry-platform/
+  kind-config.yaml
+  README.md
+  build.gradle
+  settings.gradle
 ```
 
 ## 3. Technology Stack
@@ -200,10 +205,10 @@ management:
 
 ### 6.2. Project Structure
 
-Under `services/agent-ingest-svc`:
+Under `agent-ingest-svc/`:
 
 ```text
-services/agent-ingest-svc/
+agent-ingest-svc/
   build.gradle
   src/
     main/
@@ -374,10 +379,10 @@ public class TelemetryController {
 
 ### 7.2. Project Structure
 
-Under `services/device-state-svc`:
+Under `device-state-svc/`:
 
 ```text
-services/device-state-svc/
+device-state-svc/
   build.gradle
   src/
     main/
@@ -504,7 +509,7 @@ public class DeviceStatusController {
 
 Both services are packaged into Docker images.
 
-### 8.1. services/agent-ingest-svc/Dockerfile
+### 8.1. agent-ingest-svc/Dockerfile
 
 ```dockerfile
 FROM eclipse-temurin:21-jre
@@ -514,7 +519,7 @@ ENV JAVA_OPTS=""
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
 ```
 
-### 8.2. services/device-state-svc/Dockerfile
+### 8.2. device-state-svc/Dockerfile
 
 ```dockerfile
 FROM eclipse-temurin:21-jre
@@ -771,77 +776,78 @@ Helm charts are provided under `helm/telemetry-platform` to deploy the entire st
 - **Install example**:
 
   ```bash
-  helm install telemetry-platform ./helm/telemetry-platform
+  helm upgrade --install telemetry-platform ./helm/telemetry-platform \
+    --namespace telemetry \
+    --create-namespace
   ```
 
   Override values (for example, container images) using `-f custom-values.yaml` or `--set dependencyName.image=...`.
 
-## 10. Manual Flow (Sanity Check, Not for Codex Execution)
+## 10. Local Kubernetes Deployment (Sanity Check)
 
-This is reference only; Codex should just ensure code and manifests align.
+This flow mirrors the contributor quickstart in `README.md`.
 
-Build services and Docker images:
+1. **Build the services**
+   ```bash
+   ./gradlew clean build
+   ```
 
-```bash
-cd services/agent-ingest-svc
-./gradlew clean build
-docker build -t agent-ingest-svc:release1 .
+2. **Build Docker images**
+   ```bash
+   docker build -t agent-ingest-svc:release1 ./agent-ingest-svc
+   docker build -t device-state-svc:release1 ./device-state-svc
+   ```
 
-cd ../device-state-svc
-./gradlew clean build
-docker build -t device-state-svc:release1 .
-```
+3. **Create Kind cluster with ingress ports**
+   ```bash
+   kind create cluster --name telemetry --config kind-config.yaml
+   ```
 
-Load images into kind (if using kind):
+4. **Load images into Kind**
+   ```bash
+   kind load docker-image agent-ingest-svc:release1 --name telemetry
+   kind load docker-image device-state-svc:release1 --name telemetry
+   ```
 
-```bash
-kind load docker-image agent-ingest-svc:release1 --name telemetry
-kind load docker-image device-state-svc:release1 --name telemetry
-```
+5. **Install NGINX Ingress (if absent)**
+   ```bash
+   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+   ```
 
-Deploy with Helm (preferred):
+6. **Deploy with Helm**
+   ```bash
+   helm dependency update helm/telemetry-platform
+   helm upgrade --install telemetry-platform ./helm/telemetry-platform \
+     --namespace telemetry \
+     --create-namespace
+   ```
 
-```bash
-cd helm/telemetry-platform
-helm dependency update
-helm install telemetry-platform ./helm/telemetry-platform
-# or upgrade an existing release
-helm upgrade --install telemetry-platform ./helm/telemetry-platform
-# preview manifests without installing
-helm template telemetry-platform ./helm/telemetry-platform
-```
+7. **Map ingress host locally**
+   ```
+   127.0.0.1 telemetry.local
+   ```
+   Add the entry above to `/etc/hosts`.
 
-Add `/etc/hosts` mapping:
+8. **Smoke-test the APIs**
+   ```bash
+   curl -X POST http://telemetry.local/api/telemetry \
+     -H "Content-Type: application/json" \
+     -d '{
+           "deviceId": "laptop-4421",
+           "cpu": 0.82,
+           "mem": 0.73,
+           "diskAlert": false,
+           "timestamp": "2025-11-02T18:22:00Z",
+           "processes": []
+         }'
 
-```
-127.0.0.1 telemetry.local
-```
+   curl http://telemetry.local/api/devices/laptop-4421/status
+   ```
 
-Post telemetry:
+   Expect HTTP 200 with device telemetry JSON.
 
-```bash
-curl -X POST http://telemetry.local:8080/api/telemetry \
-  -H "Content-Type: application/json" \
-  -d '{
-    "deviceId": "laptop-4421",
-    "cpu": 0.82,
-    "mem": 0.73,
-    "diskAlert": false,
-    "timestamp": "2025-11-02T18:22:00Z",
-    "processes": [
-      {"name":"chrome.exe","cpu":0.21,"mem":0.14},
-      {"name":"slack","cpu":0.05,"mem":0.07}
-    ]
-  }'
-```
-
-Read back status:
-
-```bash
-curl http://telemetry.local:8080/api/devices/laptop-4421/status
-```
-
-**Expected:** HTTP 200 and JSON with fields deviceId, cpuPct, memPct, diskAlert, updatedAt.
+9. **Automated reset & deployment**
+   - Run `./reset.sh` to execute the full workflow automatically. The script deletes and recreates the Kind cluster, rebuilds services, builds and loads Docker images, installs/updates the NGINX ingress controller, deploys the Helm chart, waits for pods, and runs smoke tests from inside the cluster.
 
 ## 11. Acceptance Criteria
 

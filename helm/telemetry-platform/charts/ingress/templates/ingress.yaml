@@ -2,23 +2,21 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: telemetry-gateway
-  namespace: {{ .Values.global.namespace }}
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  namespace: {{ .Release.Namespace }}
 spec:
   ingressClassName: nginx
   rules:
-    - host: {{ .Values.host }}
+    - host: {{ .Values.host | default "telemetry.local" }}
       http:
         paths:
-          - path: /api/telemetry/?(.*)
+          - path: /api/telemetry
             pathType: Prefix
             backend:
               service:
                 name: agent-ingest-svc
                 port:
                   number: 8080
-          - path: /api/devices/?(.*)
+          - path: /api/devices
             pathType: Prefix
             backend:
               service:

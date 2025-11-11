@@ -205,7 +205,80 @@ Then run the Spring Boot task shown.
 
 ---
 
-## 5. Documentation Site
+## 5. Local Kubernetes Deployment
+
+This walkthrough assumes Docker Desktop, Kind, kubectl, and Helm are already installed (see sections above).
+
+### 5.1 Build the services
+```bash
+./gradlew clean build
+```
+
+### 5.2 Build Docker images
+```bash
+docker build -t agent-ingest-svc:release1 ./agent-ingest-svc
+docker build -t device-state-svc:release1 ./device-state-svc
+```
+
+### 5.3 Create a Kind cluster with ingress ports
+```bash
+kind create cluster --name telemetry --config kind-config.yaml
+```
+
+### 5.4 Load images into the Kind cluster
+```bash
+kind load docker-image agent-ingest-svc:release1 --name telemetry
+kind load docker-image device-state-svc:release1 --name telemetry
+```
+
+### 5.5 Install NGINX Ingress (if not already present)
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+```
+
+Wait until the ingress controller pods report `READY 1/1`.
+
+### 5.6 Deploy the stack with Helm
+```bash
+helm dependency update helm/telemetry-platform
+helm upgrade --install telemetry-platform ./helm/telemetry-platform \
+  --namespace telemetry \
+  --create-namespace
+```
+
+### 5.7 Map the ingress host locally
+```
+127.0.0.1 telemetry.local
+```
+Add the entry above to `/etc/hosts`.
+
+### 5.8 Smoke-test the APIs
+```bash
+curl -X POST http://telemetry.local/api/telemetry \
+  -H "Content-Type: application/json" \
+  -d '{
+        "deviceId": "laptop-4421",
+        "cpu": 0.82,
+        "mem": 0.73,
+        "diskAlert": false,
+        "timestamp": "2025-11-02T18:22:00Z",
+        "processes": []
+      }'
+
+curl http://telemetry.local/api/devices/laptop-4421/status
+```
+
+### 5.9 End-to-end reset script
+
+Auto-run the entire workflow when you need a clean environment:
+
+```bash
+./reset.sh
+```
+
+The script tears down and recreates the Kind cluster, rebuilds the services, rebuilds and loads Docker images, installs or refreshes the NGINX ingress controller, deploys the Helm chart, waits for pods to become ready, and runs smoke tests inside the cluster.
+
+## 6. Documentation Site
 
 To preview documentation locally:
 ```bash
@@ -222,7 +295,7 @@ mkdocs build --strict
 
 ---
 
-## 6. Verification Script
+## 7. Verification Script
 
 Once everything is installed, run the environment validation script below to make sure your setup is correct.
 
@@ -244,7 +317,7 @@ Example output:
 
 ---
 
-## 7. Next Steps
+## 8. Next Steps
 
 1. Review architecture in [`docs/02-architecture.md`](./docs/02-architecture.md)  
 2. Inspect Helm values under `helm/telemetry-platform/`  
@@ -259,7 +332,7 @@ Example output:
 
 ---
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Problem | Solution |
 |----------|-----------|

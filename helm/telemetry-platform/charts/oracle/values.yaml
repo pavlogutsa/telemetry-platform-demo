@@ -10,11 +10,11 @@ image:
 
 resources:
   requests:
-    cpu: 250m
-    memory: 512Mi
-  limits:
     cpu: 500m
-    memory: 1Gi
+    memory: 2Gi
+  limits:
+    cpu: 2
+    memory: 4Gi
 
 service:
   type: ClusterIP
@@ -36,3 +36,19 @@ env:
 
 labels: {}
 annotations: {}
+
+livenessProbe:
+  enabled: true
+  tcpSocket:
+    port: 1521
+  initialDelaySeconds: 240      # give it 4 minutes on first start
+  periodSeconds: 15
+  failureThreshold: 10
+
+startupProbe:
+  enabled: true
+  tcpSocket:
+    port: 1521
+  initialDelaySeconds: 60
+  periodSeconds: 15
+  failureThreshold: 40          # 60 + 15*40 = ~660s max, plenty for cold start
