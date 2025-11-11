@@ -248,13 +248,13 @@ helm upgrade --install telemetry-platform ./helm/telemetry-platform \
 
 ### 5.7 Map the ingress host locally
 ```
-127.0.0.1 telemetry.local
+127.0.0.1 telemetry.internal
 ```
 Add the entry above to `/etc/hosts`.
 
 ### 5.8 Smoke-test the APIs
 ```bash
-curl -X POST http://telemetry.local/telemetry \
+curl -X POST http://telemetry.internal/telemetry \
   -H "Content-Type: application/json" \
   -d '{
         "deviceId": "laptop-4421",
@@ -265,7 +265,7 @@ curl -X POST http://telemetry.local/telemetry \
         "processes": []
       }'
 
-curl http://telemetry.local/devices/laptop-4421/status
+curl http://telemetry.internal/devices/laptop-4421/status
 ```
 
 ### 5.9 End-to-end reset script

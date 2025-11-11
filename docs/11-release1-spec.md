@@ -732,7 +732,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: telemetry.local
+    - host: telemetry.internal
       http:
         paths:
           - path: /telemetry/?(.*)
@@ -772,7 +772,7 @@ Helm charts are provided under `helm/telemetry-platform` to deploy the entire st
 - **Service subcharts** (`charts/agent-ingest-svc`, `charts/device-state-svc`) create Deployments and Services that mirror the Kubernetes manifests in sections 9.3 and 9.4. Notable defaults:
   - `agent-ingest-svc`: replicas=2, container port 8080
   - `device-state-svc`: replicas=1, container port 8081 (Service still exposed on port 8080, targeting 8081)
-- **Ingress subchart (`charts/ingress`)** exposes the API via host `telemetry.local` with the same path routing as section 9.5.
+- **Ingress subchart (`charts/ingress`)** exposes the API via host `telemetry.internal` with the same path routing as section 9.5.
 - **Install example**:
 
   ```bash
@@ -824,13 +824,13 @@ This flow mirrors the contributor quickstart in `README.md`.
 
 7. **Map ingress host locally**
    ```
-   127.0.0.1 telemetry.local
+   127.0.0.1 telemetry.internal
    ```
    Add the entry above to `/etc/hosts`.
 
 8. **Smoke-test the APIs**
    ```bash
-   curl -X POST http://telemetry.local/telemetry \
+   curl -X POST http://telemetry.internal/telemetry \
      -H "Content-Type: application/json" \
      -d '{
            "deviceId": "laptop-4421",
@@ -841,7 +841,7 @@ This flow mirrors the contributor quickstart in `README.md`.
            "processes": []
          }'
 
-   curl http://telemetry.local/devices/laptop-4421/status
+   curl http://telemetry.internal/devices/laptop-4421/status
    ```
 
    Expect HTTP 200 with device telemetry JSON.

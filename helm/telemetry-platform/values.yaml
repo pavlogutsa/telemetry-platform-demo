@@ -16,4 +16,4 @@ device-state-svc:
   servicePort: 8080
 
 ingress:
-  host: telemetry.local
+  host: telemetry.internal

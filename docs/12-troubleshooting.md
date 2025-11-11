@@ -15,7 +15,7 @@
 | `helm upgrade --install telemetry-platform infra/helm/telemetry-platform -n telemetry --create-namespace` | Deploy full stack (Oracle + services + ingress). | `helm ls` → `STATUS: deployed`; pods Ready. |
 | `kubectl get pods -n telemetry -w` | Watch rollout live. | Pods go `Pending → Running → Ready`. |
 | `kubectl get svc -n telemetry` | List cluster services. | `oracle-db` → `1521/TCP`. |
-| `kubectl get ingress -n telemetry` | Verify ingress resource. | Host `telemetry.local`, correct paths. |
+| `kubectl get ingress -n telemetry` | Verify ingress resource. | Host `telemetry.internal`, correct paths. |
 | `kubectl get pvc -n telemetry` | Check persistent volumes. | `oracle-data-oracle-db-0` → `Bound`. |
 | `kubectl get endpoints -n telemetry oracle-db` | Validate DB service endpoints. | IP:1521 visible; empty = listener down. |
 | `kubectl rollout status deployment/<svc> -n telemetry` | Wait for service rollout. | “successfully rolled out”. |
@@ -50,7 +50,7 @@
 | `kubectl get pods -n telemetry -w` | Watch pod transitions. | Running → Ready. |
 | `kubectl get configmap -n telemetry` | Check Helm-injected configs. | Expected key-value pairs. |
 | `kubectl exec -it <pod> -n telemetry -- /bin/bash` | Enter container shell. | Inspect local logs/configs manually. |
-| `curl -v http://telemetry.local/telemetry` | Full ingress path test. | `200/202` = success; `503` = backend not ready. |
+| `curl -v http://telemetry.internal/telemetry` | Full ingress path test. | `200/202` = success; `503` = backend not ready. |
 
 ---
 
@@ -112,7 +112,7 @@ Oracle logs:
 
 Microservice health:
 ```
-curl http://telemetry.local/telemetry
+curl http://telemetry.internal/telemetry
 HTTP 202 / {"status":"UP"}
 ```
 
