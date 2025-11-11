@@ -33,8 +33,8 @@ X-API-Key: <token>
 
 | Role | Permissions |
 |------|--------------|
-| **ingest** | Access `/api/telemetry` |
-| **read** | Access `/api/devices/**` |
+| **ingest** | Access `/telemetry` |
+| **read** | Access `/devices/**` |
 | **admin** | Access metrics and config endpoints |
 
 API keys can be rotated via ConfigMap update or REST management endpoint.

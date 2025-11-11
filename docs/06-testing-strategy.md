@@ -17,8 +17,8 @@
 3. End-to-end smoke
    - Run cluster locally (kind / k3d)
    - Apply Helm charts
-   - POST /api/telemetry through ingress
-   - GET /api/devices/{id}/status
+   - POST /telemetry through ingress
+   - GET /devices/{id}/status
    - Assert data path is correct
 
 ## Release gating

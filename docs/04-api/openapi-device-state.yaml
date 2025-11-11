@@ -3,7 +3,7 @@ info:
   title: Device State API
   version: "0.1.0"
 paths:
-  /api/devices/{deviceId}/status:
+  /devices/{deviceId}/status:
     get:
       summary: Get the latest known status of a device
       parameters:
@@ -33,7 +33,7 @@ paths:
                     format: date-time
         "404":
           description: Device not found
-  /api/devices/{deviceId}/history:
+  /devices/{deviceId}/history:
     get:
       summary: Get recent telemetry history for a device
       parameters:

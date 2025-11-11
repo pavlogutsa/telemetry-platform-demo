@@ -50,7 +50,7 @@ flowchart LR
 
 Entry point for telemetry ingestion.
 
-- Exposes `POST /api/telemetry`.
+- Exposes `POST /telemetry`.
 - Stateless Spring Boot 3 REST app producing to Kafka.
 - Scales horizontally behind NGINX ingress.
 
@@ -65,7 +65,7 @@ Consumes `telemetry.raw` from Kafka.
 
 ### device-state-svc
 
-Exposes device state via REST (`/api/devices/{id}/status`, `/history`).
+Exposes device state via REST (`/devices/{id}/status`, `/history`).
 
 - Reads Oracle tables; optional Redis cache.
 - Provides JSON APIs for operators or dashboards.

@@ -17,7 +17,7 @@
 - Add Redis distributed cache.
 - telemetry-processor-svc deduplicates noisy agents.
 - Introduce `telemetry.latest` & `telemetry.timeseries`.
-- Historical API `/api/devices/{id}/history`.
+- Historical API `/devices/{id}/history`.
 
 ## Release 4 – Schema Registry & Observability
 - Apicurio Registry for Avro schemas.

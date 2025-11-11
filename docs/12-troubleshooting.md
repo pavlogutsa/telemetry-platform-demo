@@ -50,7 +50,7 @@
 | `kubectl get pods -n telemetry -w` | Watch pod transitions. | Running → Ready. |
 | `kubectl get configmap -n telemetry` | Check Helm-injected configs. | Expected key-value pairs. |
 | `kubectl exec -it <pod> -n telemetry -- /bin/bash` | Enter container shell. | Inspect local logs/configs manually. |
-| `curl -v http://telemetry.local/api/telemetry` | Full ingress path test. | `200/202` = success; `503` = backend not ready. |
+| `curl -v http://telemetry.local/telemetry` | Full ingress path test. | `200/202` = success; `503` = backend not ready. |
 
 ---
 
@@ -72,7 +72,7 @@
 | `helm uninstall telemetry-platform -n telemetry` | Remove Helm release. | Helm reports release deleted. |
 | `kind delete cluster --name telemetry` | Destroy Kind cluster. | “Deleted clusters: telemetry”. |
 | `kubectl run telemetry-smoke-test --rm -i --image=curlimages/curl:8.10.1 -n telemetry --command -- sh -c 'curl -sf http://agent-ingest-svc:8080/actuator/health'` | In-cluster health check. | `{"status":"UP"}`. |
-| `curl -v http://localhost:8080/api/telemetry -H "Content-Type: application/json" -d '{...}'` | Manual POST telemetry test. | HTTP 202 success, logs show data ingestion. |
+| `curl -v http://localhost:8080/telemetry -H "Content-Type: application/json" -d '{...}'` | Manual POST telemetry test. | HTTP 202 success, logs show data ingestion. |
 
 ---
 
@@ -112,7 +112,7 @@ Oracle logs:
 
 Microservice health:
 ```
-curl http://telemetry.local/api/telemetry
+curl http://telemetry.local/telemetry
 HTTP 202 / {"status":"UP"}
 ```
 

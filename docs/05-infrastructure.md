@@ -24,7 +24,7 @@ helm install telemetry ./helm
 kubectl port-forward svc/nginx-ingress-controller 8080:80
 ```
 
-Access APIs through `http://localhost:8080/api/....`
+Access APIs through `http://localhost:8080/....`
 
 ---
 

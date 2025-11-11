@@ -11,8 +11,8 @@ This document defines all source code, configuration, and deployment files requi
 - `device-state-svc` exposes a REST API to read that latest device state.
 - Both services run in a local Kubernetes cluster.
 - NGINX Ingress exposes:
-  - `POST /api/telemetry` → `agent-ingest-svc`
-  - `GET /api/devices/{deviceId}/status` → `device-state-svc`
+  - `POST /telemetry` → `agent-ingest-svc`
+  - `GET /devices/{deviceId}/status` → `device-state-svc`
 - `/actuator/health` and `/actuator/prometheus` are enabled for both services.
 
 No Kafka, no Redis yet.
@@ -201,7 +201,7 @@ management:
 - Persist latest telemetry snapshot per device into telemetry.device_status_current.
 - Overwrite existing row for that device_id (upsert semantics).
 - HTTP endpoint inside the service: `POST /telemetry`.
-- Externally exposed via Ingress as `POST /api/telemetry`.
+- Externally exposed via Ingress as `POST /telemetry`.
 
 ### 6.2. Project Structure
 
@@ -242,7 +242,7 @@ public class AgentIngestApplication {
 
 ### 6.4. DTO – TelemetryRequest
 
-`src/main/java/com/telemetry/agent/ingest/api/TelemetryRequest.java`:
+`src/main/java/com/telemetry/agent/ingest/TelemetryRequest.java`:
 
 ```java
 package com.telemetry.agent.ingest.api;
@@ -317,7 +317,7 @@ public class DeviceStatusRepository {
 
 ### 6.6. Controller – TelemetryController
 
-`src/main/java/com/telemetry/agent/ingest/api/TelemetryController.java`:
+`src/main/java/com/telemetry/agent/ingest/TelemetryController.java`:
 
 ```java
 package com.telemetry.agent.ingest.api;
@@ -364,7 +364,7 @@ public class TelemetryController {
 
 ### 6.7. Integration Tests
 
-- Location: `agent-ingest-svc/src/test/java/com/telemetry/agent/ingest/api/TelemetryControllerIntegrationTest.java`
+- Location: `agent-ingest-svc/src/test/java/com/telemetry/agent/ingest/TelemetryControllerIntegrationTest.java`
 - `postTelemetry_insertsOrUpdatesRowInDb` boots the full Spring context (profile `test`), posts JSON to `/telemetry`, and asserts the row is persisted in `telemetry.device_status_current`.
 - `postTelemetry_withoutDeviceId_returnsBadRequestAndDoesNotInsert` verifies a malformed request returns HTTP 400 and leaves the table empty.
 
@@ -375,7 +375,7 @@ public class TelemetryController {
 - Read the latest device status from telemetry.device_status_current.
 - Expose REST endpoint:
   - Internal: `GET /devices/{deviceId}/status`
-  - Via Ingress: `GET /api/devices/{deviceId}/status`.
+  - Via Ingress: `GET /devices/{deviceId}/status`.
 
 ### 7.2. Project Structure
 
@@ -735,14 +735,14 @@ spec:
     - host: telemetry.local
       http:
         paths:
-          - path: /api/telemetry/?(.*)
+          - path: /telemetry/?(.*)
             pathType: Prefix
             backend:
               service:
                 name: agent-ingest-svc
                 port:
                   number: 8080
-          - path: /api/devices/?(.*)
+          - path: /devices/?(.*)
             pathType: Prefix
             backend:
               service:
@@ -753,8 +753,8 @@ spec:
 
 **Behavior:**
 
-- External `POST /api/telemetry` → agent-ingest-svc `POST /telemetry`
-- External `GET /api/devices/{id}/status` → device-state-svc `GET /devices/{id}/status`
+- External `POST /telemetry` → agent-ingest-svc `POST /telemetry`
+- External `GET /devices/{id}/status` → device-state-svc `GET /devices/{id}/status`
 
 ### 9.6. Helm Chart Structure
 
@@ -857,7 +857,7 @@ Release 1 is considered correctly implemented when:
 - Docker images can be built using the provided Dockerfiles.
 - Kubernetes manifests apply cleanly in the telemetry namespace.
 - Oracle XE is reachable and device_status_current exists.
-- A `POST /api/telemetry` followed by `GET /api/devices/{id}/status` works end-to-end.
+- A `POST /telemetry` followed by `GET /devices/{id}/status` works end-to-end.
 - `/actuator/health` returns UP for both services.
 - `/actuator/prometheus` is exposed and scrapes metrics for future Prometheus usage.
 
