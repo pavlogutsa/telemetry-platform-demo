@@ -3,3 +3,5 @@ site/*
 build/*
 agent-ingest-svc/build/*
 device-state-svc/build/*
+**/.terraform*
+**/.terragrunt*

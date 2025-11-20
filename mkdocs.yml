@@ -20,7 +20,9 @@ nav:
   - Security: 08-security.md
   - Release Roadmap: 09-release-roadmap.md
   - Future Notes: 10-future-notes.md
-  - Troubleshooting: 12-troubleshooting.md
+  - Appendices:
+      - Troubleshooting: 12-troubleshooting.md
+      - Terragrunt deployment: 13-terragrunt-deployment.md      
 
 plugins:
   - search
