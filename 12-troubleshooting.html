@@ -1,0 +1,1299 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="10-future-notes.html">
+      
+      
+        <link rel="next" href="13-terragrunt-deployment.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Troubleshooting - Telemetry Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.618322db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-deployment-setup" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Telemetry Platform" class="md-header__button md-logo" aria-label="Telemetry Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Telemetry Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Troubleshooting
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pavlogutsa/telemetry-platform-demo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Telemetry Platform" class="md-nav__button md-logo" aria-label="Telemetry Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Telemetry Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pavlogutsa/telemetry-platform-demo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="01-vision-scope.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vision & Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="02-architecture.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="03-data-design.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data & Messaging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="04-api/openapi-ingest.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="04-api/openapi-device-state.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device State API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Specs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="11-release1-spec.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release 1 Spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="05-infrastructure.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="06-testing-strategy.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="07-observability.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="08-security.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="09-release-roadmap.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="10-future-notes.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Future Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="12-troubleshooting.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="13-terragrunt-deployment.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terragrunt deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="1-deployment-setup">🧱 1. Deployment &amp; Setup<a class="headerlink" href="#1-deployment-setup" title="Permanent link">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th>Command / Config</th>
+<th>Purpose</th>
+<th>What to Look For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ORACLE_JDBC_URL=jdbc:oracle:thin:@//oracle-db.telemetry.svc.cluster.local:1521/XEPDB1</code></td>
+<td>Correct JDBC URL (uses <code>@//</code> for service name).</td>
+<td>Wrong prefix (<code>@</code> only) causes <code>ORA-12514</code> / <code>ORA-12505</code>.</td>
+</tr>
+<tr>
+<td><code>kind create cluster --name telemetry --config kind-config.yaml</code></td>
+<td>Create local Kind cluster (ports 80/443 open for ingress).</td>
+<td><code>kind get clusters</code> → <code>telemetry</code>; <code>kubectl cluster-info</code> healthy.</td>
+</tr>
+<tr>
+<td><code>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml</code></td>
+<td>Install NGINX Ingress Controller into Kind.</td>
+<td><code>kubectl get pods -n ingress-nginx</code> → <code>ingress-nginx-controller</code> 1/1 Running.</td>
+</tr>
+<tr>
+<td><code>./gradlew clean build</code></td>
+<td>Build Java microservices (<code>agent-ingest-svc</code>, <code>device-state-svc</code>).</td>
+<td><code>BUILD SUCCESSFUL</code>; JARs under <code>build/libs</code>.</td>
+</tr>
+<tr>
+<td><code>docker build -t telemetry/&lt;svc&gt;:local services/&lt;svc&gt;</code></td>
+<td>Build Docker images for each service.</td>
+<td>Image appears in <code>docker images</code>.</td>
+</tr>
+<tr>
+<td><code>kind load docker-image telemetry/&lt;svc&gt;:local --name telemetry</code></td>
+<td>Load built image into Kind’s internal registry.</td>
+<td>“Image loaded successfully”; visible in <code>kubectl describe pod</code>.</td>
+</tr>
+<tr>
+<td><code>kubectl create namespace telemetry</code></td>
+<td>Create namespace for all resources.</td>
+<td>Listed in <code>kubectl get ns</code>.</td>
+</tr>
+<tr>
+<td><code>kubectl create secret generic oracle-credentials --from-literal=ORACLE_USER=telemetry --from-literal=ORACLE_PASSWORD=telemetry_pw --from-literal=ORACLE_JDBC_URL=jdbc:oracle:thin:@//oracle-db.telemetry.svc.cluster.local:1521/XEPDB1 -n telemetry</code></td>
+<td>Store Oracle credentials.</td>
+<td>Secret created successfully.</td>
+</tr>
+<tr>
+<td><code>kubectl apply -f oracle-db.yaml</code> / <code>oracle.yml</code></td>
+<td>Deploy Oracle manually.</td>
+<td><code>oracle-db-0</code> pod created, Ready 1/1.</td>
+</tr>
+<tr>
+<td><code>helm upgrade --install oracle . -n telemetry</code></td>
+<td>Install Oracle via Helm chart.</td>
+<td>Successful upgrade/install message.</td>
+</tr>
+<tr>
+<td><code>helm upgrade --install telemetry-platform infra/helm/telemetry-platform -n telemetry --create-namespace</code></td>
+<td>Deploy full stack (Oracle + services + ingress).</td>
+<td><code>helm ls</code> → <code>STATUS: deployed</code>; pods Ready.</td>
+</tr>
+<tr>
+<td><code>kubectl get pods -n telemetry -w</code></td>
+<td>Watch rollout live.</td>
+<td>Pods go <code>Pending → Running → Ready</code>.</td>
+</tr>
+<tr>
+<td><code>kubectl get svc -n telemetry</code></td>
+<td>List cluster services.</td>
+<td><code>oracle-db</code> → <code>1521/TCP</code>.</td>
+</tr>
+<tr>
+<td><code>kubectl get ingress -n telemetry</code></td>
+<td>Verify ingress resource.</td>
+<td>Host <code>telemetry.internal</code>, correct paths.</td>
+</tr>
+<tr>
+<td><code>kubectl get pvc -n telemetry</code></td>
+<td>Check persistent volumes.</td>
+<td><code>oracle-data-oracle-db-0</code> → <code>Bound</code>.</td>
+</tr>
+<tr>
+<td><code>kubectl get endpoints -n telemetry oracle-db</code></td>
+<td>Validate DB service endpoints.</td>
+<td>IP:1521 visible; empty = listener down.</td>
+</tr>
+<tr>
+<td><code>kubectl rollout status deployment/&lt;svc&gt; -n telemetry</code></td>
+<td>Wait for service rollout.</td>
+<td>“successfully rolled out”.</td>
+</tr>
+<tr>
+<td><code>kubectl port-forward svc/agent-ingest-svc -n telemetry 8080:8080</code></td>
+<td>Test app locally.</td>
+<td><code>curl http://localhost:8080/actuator/health</code> → <code>{"status":"UP"}</code>.</td>
+</tr>
+<tr>
+<td><code>kubectl port-forward svc/oracle-db 1521:1521 -n telemetry</code></td>
+<td>Test Oracle locally.</td>
+<td>Connect via <code>jdbc:oracle:thin:@//localhost:1521/XEPDB1</code>.</td>
+</tr>
+<tr>
+<td><code>helm list -n telemetry</code></td>
+<td>List Helm releases.</td>
+<td><code>telemetry-platform</code> → <code>deployed</code>.</td>
+</tr>
+<tr>
+<td><code>kubectl get events -n telemetry --sort-by=.metadata.creationTimestamp</code></td>
+<td>Review recent namespace events.</td>
+<td>Errors, restarts, or CrashLoops.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="2-debugging-inspection">🩺 2. Debugging &amp; Inspection<a class="headerlink" href="#2-debugging-inspection" title="Permanent link">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+<th>What to Look For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kubectl logs -f oracle-db-0 -n telemetry</code></td>
+<td>Stream Oracle startup logs.</td>
+<td><code>DATABASE IS READY TO USE!</code> or <code>Listening on: ... PORT=1521</code>.</td>
+</tr>
+<tr>
+<td><code>kubectl logs -f agent-ingest-0 -n telemetry</code></td>
+<td>Watch microservice logs for DB errors.</td>
+<td><code>ORA-12514</code>, <code>ORA-12505</code>, <code>ORA-28009</code>, or “Connection refused”.</td>
+</tr>
+<tr>
+<td><code>kubectl describe pod oracle-db-0 -n telemetry</code></td>
+<td>Full pod info (events, exit codes, restarts).</td>
+<td><code>Exit Code 137</code> (OOMKilled), <code>57</code> (Oracle internal).</td>
+</tr>
+<tr>
+<td><code>kubectl logs oracle-db-0 -n telemetry --previous</code></td>
+<td>View logs from last crash.</td>
+<td>Fatal ORA errors before restart.</td>
+</tr>
+<tr>
+<td><code>kubectl exec -it oracle-db-0 -n telemetry -- bash -lc "tail -n 100 /opt/oracle/diag/rdbms/*/*/trace/alert_*.log"</code></td>
+<td>Inspect Oracle alert log.</td>
+<td>ORA-xxxx for memory, file, or startup errors.</td>
+</tr>
+<tr>
+<td><code>kubectl exec -it -n telemetry deploy/agent-ingest-svc -- printenv | grep ORACLE_</code></td>
+<td>View env vars inside container.</td>
+<td>All <code>ORACLE_*</code> vars set correctly.</td>
+</tr>
+<tr>
+<td><code>kubectl get secret -n telemetry oracle-credentials -o jsonpath='{.data.ORACLE_JDBC_URL}' | base64 -d</code></td>
+<td>Decode JDBC URL from secret.</td>
+<td>Correct host, port, and DB name.</td>
+</tr>
+<tr>
+<td><code>kubectl exec -it -n telemetry deploy/agent-ingest-svc -- sh -c "echo &gt; /dev/tcp/oracle-db.telemetry.svc.cluster.local/1521"</code></td>
+<td>Check Oracle port reachability.</td>
+<td>Exit 0 = connection OK.</td>
+</tr>
+<tr>
+<td><code>kubectl run testbox --rm -it --image=busybox -n telemetry -- /bin/sh</code> → <code>nc -vz oracle-db.telemetry.svc.cluster.local 1521</code></td>
+<td>Network test via netcat.</td>
+<td>“succeeded/open” = OK.</td>
+</tr>
+<tr>
+<td><code>kubectl exec -it oracle-db-0 -n telemetry -- bash</code> → <code>lsnrctl status | grep XEPDB1</code></td>
+<td>Check listener registration.</td>
+<td>Service XEPDB1 listed.</td>
+</tr>
+<tr>
+<td><code>sqlplus sys/$ORACLE_PASSWORD@//localhost/XEPDB1 as sysdba</code></td>
+<td>Manual Oracle connection.</td>
+<td>“Connected to:” output.</td>
+</tr>
+<tr>
+<td><code>kubectl get endpoints -n telemetry &lt;svc&gt;</code></td>
+<td>Verify service backends.</td>
+<td>IP:PORT displayed.</td>
+</tr>
+<tr>
+<td><code>kubectl get pvc -n telemetry</code> / <code>kubectl describe pvc &lt;pvc&gt;</code></td>
+<td>Inspect volume state.</td>
+<td><code>Bound</code> = healthy; <code>Pending</code> = storage issue.</td>
+</tr>
+<tr>
+<td><code>helm get manifest telemetry-platform -n telemetry</code></td>
+<td>See rendered Helm YAML.</td>
+<td>Verify PVCs, envs, selectors.</td>
+</tr>
+<tr>
+<td><code>helm list -n telemetry</code></td>
+<td>Confirm Helm release status.</td>
+<td><code>STATUS: deployed</code>.</td>
+</tr>
+<tr>
+<td><code>kubectl describe statefulset oracle-db -n telemetry</code></td>
+<td>Inspect StatefulSet details.</td>
+<td>Check <code>resources:</code> and <code>volumeClaimTemplates:</code>.</td>
+</tr>
+<tr>
+<td><code>kubectl describe statefulset oracle-db -n telemetry | grep -A5 "resources:"</code></td>
+<td>Review resource limits.</td>
+<td>Matches Helm values.</td>
+</tr>
+<tr>
+<td><code>kubectl get pods -n telemetry -w</code></td>
+<td>Watch pod transitions.</td>
+<td>Running → Ready.</td>
+</tr>
+<tr>
+<td><code>kubectl get configmap -n telemetry</code></td>
+<td>Check Helm-injected configs.</td>
+<td>Expected key-value pairs.</td>
+</tr>
+<tr>
+<td><code>kubectl exec -it &lt;pod&gt; -n telemetry -- /bin/bash</code></td>
+<td>Enter container shell.</td>
+<td>Inspect local logs/configs manually.</td>
+</tr>
+<tr>
+<td><code>curl -v http://telemetry.internal/telemetry</code></td>
+<td>Full ingress path test.</td>
+<td><code>200/202</code> = success; <code>503</code> = backend not ready.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="3-troubleshooting-maintenance">🧯 3. Troubleshooting &amp; Maintenance<a class="headerlink" href="#3-troubleshooting-maintenance" title="Permanent link">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+<th>What to Look For / Expected Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kubectl rollout restart deploy/&lt;service&gt; -n telemetry</code></td>
+<td>Restart deployments after config changes.</td>
+<td>Pods recreate → 1/1 Ready.</td>
+</tr>
+<tr>
+<td><code>kubectl delete pod &lt;pod&gt; -n telemetry</code></td>
+<td>Restart a stuck pod manually.</td>
+<td>New pod starts cleanly.</td>
+</tr>
+<tr>
+<td><code>kubectl scale statefulset oracle-db -n telemetry --replicas=0</code> → <code>--replicas=1</code></td>
+<td>Safely restart Oracle.</td>
+<td>Pod restarts with new uptime.</td>
+</tr>
+<tr>
+<td><code>kubectl delete statefulset oracle-db -n telemetry</code></td>
+<td>Remove faulty Oracle instance.</td>
+<td>StatefulSet gone, ready to redeploy.</td>
+</tr>
+<tr>
+<td><code>kubectl delete pvc oracle-data-oracle-db-0 -n telemetry</code></td>
+<td>Reset Oracle data.</td>
+<td>PVC deleted → new DB on redeploy.</td>
+</tr>
+<tr>
+<td><code>kubectl patch pvc oracle-data-oracle-db-0 -n telemetry -p '{"metadata":{"finalizers":[]}}' --type=merge</code></td>
+<td>Remove stuck PVC.</td>
+<td>PVC disappears.</td>
+</tr>
+<tr>
+<td><code>kubectl patch svc oracle-db -n telemetry -p '{"spec":{"selector":{"app":"oracle-db"}}}'</code></td>
+<td>Fix bad Service selector.</td>
+<td><code>kubectl get endpoints oracle-db</code> → IP:1521.</td>
+</tr>
+<tr>
+<td><code>kubectl logs -f oracle-db-0 -n telemetry (after redeploy)</code></td>
+<td>Verify successful DB init.</td>
+<td><code>######################### DATABASE IS READY TO USE! #########################</code>.</td>
+</tr>
+<tr>
+<td><code>docker restart</code> / <code>kind delete cluster &amp;&amp; kind create cluster</code></td>
+<td>Clean semaphores / reset environment.</td>
+<td>Fixes ORA-01081 errors.</td>
+</tr>
+<tr>
+<td><code>kubectl apply -f oracle.yml</code> (add <code>/dev/shm</code> volume)</td>
+<td>Increase Oracle shared memory.</td>
+<td>Startup memory errors resolved.</td>
+</tr>
+<tr>
+<td><code>kubectl delete namespace telemetry --grace-period=0 --force</code></td>
+<td>Wipe namespace completely.</td>
+<td>Namespace removed.</td>
+</tr>
+<tr>
+<td><code>helm uninstall telemetry-platform -n telemetry</code></td>
+<td>Remove Helm release.</td>
+<td>Helm reports release deleted.</td>
+</tr>
+<tr>
+<td><code>kind delete cluster --name telemetry</code></td>
+<td>Destroy Kind cluster.</td>
+<td>“Deleted clusters: telemetry”.</td>
+</tr>
+<tr>
+<td><code>kubectl run telemetry-smoke-test --rm -i --image=curlimages/curl:8.10.1 -n telemetry --command -- sh -c 'curl -sf http://agent-ingest-svc:8080/actuator/health'</code></td>
+<td>In-cluster health check.</td>
+<td><code>{"status":"UP"}</code>.</td>
+</tr>
+<tr>
+<td><code>curl -v http://localhost:8080/telemetry -H "Content-Type: application/json" -d '{...}'</code></td>
+<td>Manual POST telemetry test.</td>
+<td>HTTP 202 success, logs show data ingestion.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="4-quick-symptom-guide">🧩 4. Quick Symptom Guide<a class="headerlink" href="#4-quick-symptom-guide" title="Permanent link">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Root Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ORA-12514 / ORA-12505</code></td>
+<td>Wrong JDBC URL (<code>@</code> instead of <code>@//</code>).</td>
+<td>Use correct format: <code>jdbc:oracle:thin:@//host:1521/XEPDB1</code>.</td>
+</tr>
+<tr>
+<td><code>ORA-12541: No listener</code></td>
+<td>Listener not started or Service has no endpoints.</td>
+<td>Restart Oracle; fix Service selector.</td>
+</tr>
+<tr>
+<td><code>ORA-01017: Invalid username/password</code></td>
+<td>Wrong credentials or missing user.</td>
+<td><code>CREATE USER telemetry IDENTIFIED BY telemetry_pw;</code> update secret.</td>
+</tr>
+<tr>
+<td><code>ORA-00942: Table or view does not exist</code></td>
+<td>Schema missing or migrations not run.</td>
+<td>Add Flyway scripts (<code>V1__create_table.sql</code>).</td>
+</tr>
+<tr>
+<td><code>ORA-01081</code></td>
+<td>Stale IPC/semaphore state.</td>
+<td>Restart cluster or container.</td>
+</tr>
+<tr>
+<td><code>CrashLoopBackOff</code></td>
+<td>Repeated startup failures.</td>
+<td>Check logs; verify memory, DB, env vars.</td>
+</tr>
+<tr>
+<td><code>Exit Code 137 / OOMKilled</code></td>
+<td>Insufficient memory.</td>
+<td>Increase pod/node memory.</td>
+</tr>
+<tr>
+<td><code>503 Service Temporarily Unavailable</code></td>
+<td>Ingress with no ready endpoints.</td>
+<td>Fix DB connection; pods become Ready.</td>
+</tr>
+<tr>
+<td><code>Connection refused</code></td>
+<td>Network or port mapping issue.</td>
+<td>Verify ingress/port-forward.</td>
+</tr>
+<tr>
+<td>“<code>DATABASE IS READY TO USE!</code>”</td>
+<td>Oracle startup complete.</td>
+<td>Safe to connect via JDBC.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="quick-checklist-for-contributors">✅ Quick Checklist for Contributors<a class="headerlink" href="#quick-checklist-for-contributors" title="Permanent link">&para;</a></h1>
+<ul>
+<li><strong>Pods Pending / CrashLoopBackOff</strong> → <code>kubectl describe pod</code> + <code>kubectl logs</code>.</li>
+<li><strong>PVC Pending</strong> → Check <code>WaitForFirstConsumer</code> or storage class; delete/recreate.</li>
+<li><strong>Oracle stuck on “Break signaled”</strong> → Delete PVC → restart StatefulSet.</li>
+<li><strong>No response from services</strong> → <code>kubectl port-forward</code> or in-cluster curl.</li>
+<li><strong>Full redeploy</strong> → Run <code>kind delete cluster &amp;&amp; kind create cluster</code>.</li>
+</ul>
+<hr />
+<h1 id="healthy-system-indicators">🧠 Healthy System Indicators<a class="headerlink" href="#healthy-system-indicators" title="Permanent link">&para;</a></h1>
+<p>Oracle logs:
+<div class="highlight"><pre><span></span><code>######################### DATABASE IS READY TO USE! #########################
+</code></pre></div></p>
+<p>Microservice health:
+<div class="highlight"><pre><span></span><code>curl http://telemetry.internal/telemetry
+HTTP 202 / {&quot;status&quot;:&quot;UP&quot;}
+</code></pre></div></p>
+<p>At that point — everything is configured, connected, and operational.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": [], "search": "assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

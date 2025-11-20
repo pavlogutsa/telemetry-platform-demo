@@ -1,0 +1,2562 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="04-api/openapi-device-state.yaml">
+      
+      
+        <link rel="next" href="05-infrastructure.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Release 1 Spec - Telemetry Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.618322db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#telemetry-platform-release-1-implementation-spec-code-kubernetes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Telemetry Platform" class="md-header__button md-logo" aria-label="Telemetry Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Telemetry Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Release 1 Spec
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pavlogutsa/telemetry-platform-demo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Telemetry Platform" class="md-nav__button md-logo" aria-label="Telemetry Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Telemetry Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pavlogutsa/telemetry-platform-demo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="01-vision-scope.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vision & Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="02-architecture.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="03-data-design.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data & Messaging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="04-api/openapi-ingest.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="04-api/openapi-device-state.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device State API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Specs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release 1 Spec
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="11-release1-spec.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release 1 Spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Goal
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-repository-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Repository Layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-technology-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Technology Stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-database-design-oracle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Database Design (Oracle)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Database Design (Oracle)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-schema-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Schema / User
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-table-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Table Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-shared-spring-configuration-both-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Shared Spring Configuration (Both Services)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Shared Spring Configuration (Both Services)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-shared-gradle-build-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. Shared Gradle Build Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-shared-applicationyaml-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Shared application.yaml Template
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-service-1-agent-ingest-svc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Service 1 – agent-ingest-svc
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Service 1 – agent-ingest-svc">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1. Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2. Project Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-main-application-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3. Main Application Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-dto-telemetryrequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4. DTO – TelemetryRequest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-repository-devicestatusrepository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5. Repository – DeviceStatusRepository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-controller-telemetrycontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6. Controller – TelemetryController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7. Integration Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-service-2-device-state-svc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Service 2 – device-state-svc
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Service 2 – device-state-svc">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1. Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2. Project Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-main-application-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3. Main Application Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-repository-devicestatusreadrepository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4. Repository – DeviceStatusReadRepository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-controller-devicestatuscontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5. Controller – DeviceStatusController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6. Integration Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-dockerfiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Dockerfiles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Dockerfiles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-agent-ingest-svcdockerfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1. agent-ingest-svc/Dockerfile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-device-state-svcdockerfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2. device-state-svc/Dockerfile
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-kubernetes-manifests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Kubernetes Manifests
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Kubernetes Manifests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-secret-for-oracle-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1. Secret for Oracle Credentials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-oracle-statefulset-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2. Oracle StatefulSet &amp; Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-agent-ingest-svc-chart-deployment-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3. agent-ingest-svc Chart (Deployment &amp; Service)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-device-state-svc-chart-deployment-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4. device-state-svc Chart (Deployment &amp; Service)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-ingress-nginx-api-gateway-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5. Ingress – NGINX API Gateway Chart
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-helm-chart-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6. Helm Chart Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-local-kubernetes-deployment-sanity-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Local Kubernetes Deployment (Sanity Check)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-acceptance-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Acceptance Criteria
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="05-infrastructure.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="06-testing-strategy.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="07-observability.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="08-security.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="09-release-roadmap.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="10-future-notes.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Future Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="12-troubleshooting.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="13-terragrunt-deployment.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terragrunt deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Goal
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-repository-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Repository Layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-technology-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Technology Stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-database-design-oracle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Database Design (Oracle)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Database Design (Oracle)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-schema-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Schema / User
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-table-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Table Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-shared-spring-configuration-both-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Shared Spring Configuration (Both Services)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Shared Spring Configuration (Both Services)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-shared-gradle-build-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. Shared Gradle Build Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-shared-applicationyaml-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Shared application.yaml Template
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-service-1-agent-ingest-svc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Service 1 – agent-ingest-svc
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Service 1 – agent-ingest-svc">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1. Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2. Project Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-main-application-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3. Main Application Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-dto-telemetryrequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4. DTO – TelemetryRequest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-repository-devicestatusrepository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5. Repository – DeviceStatusRepository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-controller-telemetrycontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6. Controller – TelemetryController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7. Integration Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-service-2-device-state-svc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Service 2 – device-state-svc
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Service 2 – device-state-svc">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1. Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2. Project Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-main-application-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3. Main Application Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-repository-devicestatusreadrepository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4. Repository – DeviceStatusReadRepository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-controller-devicestatuscontroller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5. Controller – DeviceStatusController
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6. Integration Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-dockerfiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Dockerfiles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Dockerfiles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-agent-ingest-svcdockerfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1. agent-ingest-svc/Dockerfile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-device-state-svcdockerfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2. device-state-svc/Dockerfile
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-kubernetes-manifests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Kubernetes Manifests
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Kubernetes Manifests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-secret-for-oracle-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1. Secret for Oracle Credentials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-oracle-statefulset-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2. Oracle StatefulSet &amp; Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-agent-ingest-svc-chart-deployment-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3. agent-ingest-svc Chart (Deployment &amp; Service)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-device-state-svc-chart-deployment-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4. device-state-svc Chart (Deployment &amp; Service)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-ingress-nginx-api-gateway-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5. Ingress – NGINX API Gateway Chart
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-helm-chart-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6. Helm Chart Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-local-kubernetes-deployment-sanity-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Local Kubernetes Deployment (Sanity Check)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-acceptance-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Acceptance Criteria
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="telemetry-platform-release-1-implementation-spec-code-kubernetes">Telemetry Platform – Release 1 Implementation Spec (Code &amp; Kubernetes)<a class="headerlink" href="#telemetry-platform-release-1-implementation-spec-code-kubernetes" title="Permanent link">&para;</a></h1>
+<p>This document defines all source code, configuration, and deployment files required for <strong>Release 1</strong> of the Telemetry Platform project.</p>
+<hr />
+<h2 id="1-goal">1. Goal<a class="headerlink" href="#1-goal" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Devices send telemetry via HTTP.</li>
+<li><code>agent-ingest-svc</code> receives telemetry and writes the <strong>latest device state</strong> into Oracle DB.</li>
+<li><code>device-state-svc</code> exposes a REST API to read that latest device state.</li>
+<li>Both services run in a local Kubernetes cluster.</li>
+<li>NGINX Ingress exposes:</li>
+<li><code>POST /telemetry</code> → <code>agent-ingest-svc</code></li>
+<li><code>GET /devices/{deviceId}/status</code> → <code>device-state-svc</code></li>
+<li><code>/actuator/health</code> and <code>/actuator/prometheus</code> are enabled for both services.</li>
+</ul>
+<p>No Kafka, no Redis yet.</p>
+<hr />
+<h2 id="2-repository-layout">2. Repository Layout<a class="headerlink" href="#2-repository-layout" title="Permanent link">&para;</a></h2>
+<p>Ensure the following structure under repo root <code>telemetry-platform-demo/</code>:</p>
+<div class="highlight"><pre><span></span><code>telemetry-platform-demo/
+  agent-ingest-svc/
+  device-state-svc/
+  docs/
+    11-release1-spec.md
+  helm/
+    telemetry-platform/
+  kind-config.yaml
+  README.md
+  build.gradle
+  settings.gradle
+</code></pre></div>
+<h2 id="3-technology-stack">3. Technology Stack<a class="headerlink" href="#3-technology-stack" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Java 21</li>
+<li>Spring Boot 3.3.5</li>
+<li>Gradle (Groovy DSL, multi-module project)</li>
+<li>Oracle XE</li>
+<li>Spring Web + JDBC + Actuator</li>
+<li>Docker images</li>
+<li>Kubernetes manifests (YAML)</li>
+<li>NGINX Ingress Controller</li>
+</ul>
+<h2 id="4-database-design-oracle">4. Database Design (Oracle)<a class="headerlink" href="#4-database-design-oracle" title="Permanent link">&para;</a></h2>
+<h3 id="41-schema-user">4.1. Schema / User<a class="headerlink" href="#41-schema-user" title="Permanent link">&para;</a></h3>
+<p>Assumptions (created manually outside of this spec):</p>
+<ul>
+<li>Oracle XE running with PDB/service name XEPDB1</li>
+<li>DB user: telemetry</li>
+<li>Password: telemetry_pw</li>
+<li>JDBC URL (inside cluster):</li>
+</ul>
+<div class="highlight"><pre><span></span><code>jdbc:oracle:thin:@oracle-db.telemetry.svc.cluster.local:1521/XEPDB1
+</code></pre></div>
+<h3 id="42-table-definition">4.2. Table Definition<a class="headerlink" href="#42-table-definition" title="Permanent link">&para;</a></h3>
+<p>The table used in Release 1 to store latest device status:</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">telemetry</span><span class="p">.</span><span class="n">device_status_current</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">device_id</span><span class="w">   </span><span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">cpu_pct</span><span class="w">     </span><span class="nb">NUMBER</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+<span class="w">    </span><span class="n">mem_pct</span><span class="w">     </span><span class="nb">NUMBER</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+<span class="w">    </span><span class="n">disk_alert</span><span class="w">  </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="w">    </span><span class="n">updated_at</span><span class="w">  </span><span class="k">TIMESTAMP</span>
+<span class="p">);</span>
+</code></pre></div>
+<p><strong>Semantics:</strong></p>
+<ul>
+<li>One row per device_id</li>
+<li>cpu_pct, mem_pct = current CPU/memory usage</li>
+<li>disk_alert = 'Y' if some disk alert is active, 'N' otherwise</li>
+<li>updated_at = last update time (DB time)</li>
+</ul>
+<h2 id="5-shared-spring-configuration-both-services">5. Shared Spring Configuration (Both Services)<a class="headerlink" href="#5-shared-spring-configuration-both-services" title="Permanent link">&para;</a></h2>
+<p>Both agent-ingest-svc and device-state-svc must:</p>
+<ul>
+<li>Use Spring Boot 3 + Java 21</li>
+<li>Use Spring JDBC Template</li>
+<li>Read DB connection from environment variables:</li>
+<li>ORACLE_JDBC_URL</li>
+<li>ORACLE_USER</li>
+<li>ORACLE_PASSWORD</li>
+<li>Expose:</li>
+<li><code>/actuator/health</code></li>
+<li><code>/actuator/prometheus</code></li>
+</ul>
+<h3 id="51-shared-gradle-build-configuration">5.1. Shared Gradle Build Configuration<a class="headerlink" href="#51-shared-gradle-build-configuration" title="Permanent link">&para;</a></h3>
+<p>The project uses a multi-module Gradle structure with Groovy DSL (<code>build.gradle</code>). Plugin versions are managed at the root level.</p>
+<p><strong>Root <code>build.gradle</code>:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="s1">&#39;org.springframework.boot&#39;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s1">&#39;3.3.5&#39;</span><span class="w"> </span><span class="n">apply</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="s1">&#39;io.spring.dependency-management&#39;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s1">&#39;1.1.5&#39;</span><span class="w"> </span><span class="n">apply</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="s1">&#39;java&#39;</span>
+<span class="o">}</span>
+
+<span class="n">allprojects</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;com.telemetry&#39;</span>
+<span class="w">    </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;0.0.1-SNAPSHOT&#39;</span>
+
+<span class="w">    </span><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">mavenCentral</span><span class="o">()</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">subprojects</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s1">&#39;java&#39;</span>
+
+<span class="w">    </span><span class="n">java</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">sourceCompatibility</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JavaVersion</span><span class="o">.</span><span class="na">VERSION_21</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">    </span><span class="n">tasks</span><span class="o">.</span><span class="na">withType</span><span class="o">(</span><span class="n">Test</span><span class="o">).</span><span class="na">configureEach</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">useJUnitPlatform</span><span class="o">()</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p><strong>Service-level <code>build.gradle</code> (e.g., <code>agent-ingest-svc/build.gradle</code>):</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">id</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">id</span><span class="o">(</span><span class="s2">&quot;io.spring.dependency-management&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">id</span><span class="o">(</span><span class="s2">&quot;java&quot;</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="n">java</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">toolchain</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">languageVersion</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">JavaLanguageVersion</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">21</span><span class="o">))</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">mavenCentral</span><span class="o">()</span>
+<span class="o">}</span>
+
+<span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-web&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-actuator&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-jdbc&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">implementation</span><span class="o">(</span><span class="s2">&quot;com.oracle.database.jdbc:ojdbc11:23.4.0.24.05&quot;</span><span class="o">)</span>
+
+<span class="w">    </span><span class="n">testImplementation</span><span class="o">(</span><span class="s2">&quot;org.springframework.boot:spring-boot-starter-test&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">testImplementation</span><span class="o">(</span><span class="s2">&quot;org.assertj:assertj-core:3.26.0&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">testImplementation</span><span class="o">(</span><span class="s2">&quot;org.mockito:mockito-core:5.12.0&quot;</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+<h3 id="52-shared-applicationyaml-template">5.2. Shared application.yaml Template<a class="headerlink" href="#52-shared-applicationyaml-template" title="Permanent link">&para;</a></h3>
+<p>Each service has <code>src/main/resources/application.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">server</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+
+<span class="nt">spring</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">datasource</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${ORACLE_JDBC_URL}</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${ORACLE_USER}</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${ORACLE_PASSWORD}</span>
+<span class="w">    </span><span class="nt">driver-class-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle.jdbc.OracleDriver</span>
+
+<span class="nt">management</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">web</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">exposure</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">health,metrics,prometheus</span>
+<span class="w">  </span><span class="nt">endpoint</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<p><strong>Note:</strong>
+- Services may use different ports (e.g., agent-ingest-svc: 8080, device-state-svc: 8081) for local development. In Kubernetes, services run in separate pods and can use the same port.
+- Kafka configuration may be present in <code>application.yaml</code> but is not used in Release 1.</p>
+<h2 id="6-service-1-agent-ingest-svc">6. Service 1 – agent-ingest-svc<a class="headerlink" href="#6-service-1-agent-ingest-svc" title="Permanent link">&para;</a></h2>
+<h3 id="61-purpose">6.1. Purpose<a class="headerlink" href="#61-purpose" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Receive telemetry data from devices via HTTP (JSON).</li>
+<li>Persist latest telemetry snapshot per device into telemetry.device_status_current.</li>
+<li>Overwrite existing row for that device_id (upsert semantics).</li>
+<li>HTTP endpoint inside the service: <code>POST /telemetry</code>.</li>
+<li>Externally exposed via Ingress as <code>POST /telemetry</code>.</li>
+</ul>
+<h3 id="62-project-structure">6.2. Project Structure<a class="headerlink" href="#62-project-structure" title="Permanent link">&para;</a></h3>
+<p>Under <code>agent-ingest-svc/</code>:</p>
+<div class="highlight"><pre><span></span><code>agent-ingest-svc/
+  build.gradle
+  src/
+    main/
+      java/
+        com/telemetry/agent/ingest/
+          AgentIngestApplication.java
+          api/TelemetryController.java
+          api/TelemetryRequest.java
+          repo/DeviceStatusRepository.java
+      resources/
+        application.yaml
+</code></pre></div>
+<h3 id="63-main-application-class">6.3. Main Application Class<a class="headerlink" href="#63-main-application-class" title="Permanent link">&para;</a></h3>
+<p><code>src/main/java/com/telemetry/agent/ingest/AgentIngestApplication.java</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.telemetry.agent.ingest</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.SpringApplication</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="p">;</span>
+
+<span class="nd">@SpringBootApplication</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AgentIngestApplication</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">AgentIngestApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="64-dto-telemetryrequest">6.4. DTO – TelemetryRequest<a class="headerlink" href="#64-dto-telemetryrequest" title="Permanent link">&para;</a></h3>
+<p><code>src/main/java/com/telemetry/agent/ingest/TelemetryRequest.java</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.telemetry.agent.ingest.api</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.time.Instant</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">TelemetryRequest</span><span class="p">(</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">deviceId</span><span class="p">,</span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">cpu</span><span class="p">,</span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">mem</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Boolean</span><span class="w"> </span><span class="n">diskAlert</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Instant</span><span class="w"> </span><span class="n">timestamp</span><span class="p">,</span>
+<span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">ProcessSample</span><span class="o">&gt;</span><span class="w"> </span><span class="n">processes</span>
+<span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">ProcessSample</span><span class="p">(</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">cpu</span><span class="p">,</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">mem</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>JSON body from clients maps to this record.</li>
+<li>diskAlert may be null (default treat as false).</li>
+</ul>
+<h3 id="65-repository-devicestatusrepository">6.5. Repository – DeviceStatusRepository<a class="headerlink" href="#65-repository-devicestatusrepository" title="Permanent link">&para;</a></h3>
+<p><code>src/main/java/com/telemetry/agent/ingest/repo/DeviceStatusRepository.java</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.telemetry.agent.ingest.repo</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.jdbc.core.JdbcTemplate</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Repository</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.time.Instant</span><span class="p">;</span>
+
+<span class="nd">@Repository</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeviceStatusRepository</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">JdbcTemplate</span><span class="w"> </span><span class="n">jdbc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">DeviceStatusRepository</span><span class="p">(</span><span class="n">JdbcTemplate</span><span class="w"> </span><span class="n">jdbc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">jdbc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jdbc</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">upsertStatus</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">deviceId</span><span class="p">,</span>
+<span class="w">                             </span><span class="kt">double</span><span class="w"> </span><span class="n">cpuPct</span><span class="p">,</span>
+<span class="w">                             </span><span class="kt">double</span><span class="w"> </span><span class="n">memPct</span><span class="p">,</span>
+<span class="w">                             </span><span class="kt">boolean</span><span class="w"> </span><span class="n">diskAlert</span><span class="p">,</span>
+<span class="w">                             </span><span class="n">Instant</span><span class="w"> </span><span class="n">timestamp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">updated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jdbc</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">            UPDATE telemetry.device_status_current</span>
+<span class="s">               SET cpu_pct = ?, mem_pct = ?, disk_alert = ?, updated_at = SYSTIMESTAMP</span>
+<span class="s">             WHERE device_id = ?</span>
+<span class="s">        &quot;&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">cpuPct</span><span class="p">,</span><span class="w"> </span><span class="n">memPct</span><span class="p">,</span><span class="w"> </span><span class="n">diskAlert</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">&quot;Y&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;N&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">deviceId</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">updated</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">jdbc</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">                INSERT INTO telemetry.device_status_current</span>
+<span class="s">                    (device_id, cpu_pct, mem_pct, disk_alert, updated_at)</span>
+<span class="s">                VALUES (?, ?, ?, ?, SYSTIMESTAMP)</span>
+<span class="s">            &quot;&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">deviceId</span><span class="p">,</span><span class="w"> </span><span class="n">cpuPct</span><span class="p">,</span><span class="w"> </span><span class="n">memPct</span><span class="p">,</span><span class="w"> </span><span class="n">diskAlert</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">&quot;Y&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;N&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="66-controller-telemetrycontroller">6.6. Controller – TelemetryController<a class="headerlink" href="#66-controller-telemetrycontroller" title="Permanent link">&para;</a></h3>
+<p><code>src/main/java/com/telemetry/agent/ingest/TelemetryController.java</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.telemetry.agent.ingest.api</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">com.telemetry.agent.ingest.repo.DeviceStatusRepository</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.http.ResponseEntity</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.*</span><span class="p">;</span>
+
+<span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&quot;/telemetry&quot;</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TelemetryController</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">DeviceStatusRepository</span><span class="w"> </span><span class="n">repo</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">TelemetryController</span><span class="p">(</span><span class="n">DeviceStatusRepository</span><span class="w"> </span><span class="n">repo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">repo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repo</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@PostMapping</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">postTelemetry</span><span class="p">(</span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">TelemetryRequest</span><span class="w"> </span><span class="n">body</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">body</span><span class="p">.</span><span class="na">deviceId</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">body</span><span class="p">.</span><span class="na">deviceId</span><span class="p">().</span><span class="na">isBlank</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">badRequest</span><span class="p">().</span><span class="na">build</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">repo</span><span class="p">.</span><span class="na">upsertStatus</span><span class="p">(</span>
+<span class="w">                </span><span class="n">body</span><span class="p">.</span><span class="na">deviceId</span><span class="p">(),</span>
+<span class="w">                </span><span class="n">body</span><span class="p">.</span><span class="na">cpu</span><span class="p">(),</span>
+<span class="w">                </span><span class="n">body</span><span class="p">.</span><span class="na">mem</span><span class="p">(),</span>
+<span class="w">                </span><span class="n">body</span><span class="p">.</span><span class="na">diskAlert</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">body</span><span class="p">.</span><span class="na">diskAlert</span><span class="p">(),</span>
+<span class="w">                </span><span class="n">body</span><span class="p">.</span><span class="na">timestamp</span><span class="p">()</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">accepted</span><span class="p">().</span><span class="na">build</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>If deviceId is missing or blank → HTTP 400.</li>
+<li>Otherwise:</li>
+<li>Upsert row in device_status_current.</li>
+<li>Return HTTP 202 Accepted.</li>
+</ul>
+<h3 id="67-integration-tests">6.7. Integration Tests<a class="headerlink" href="#67-integration-tests" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Location: <code>agent-ingest-svc/src/test/java/com/telemetry/agent/ingest/TelemetryControllerIntegrationTest.java</code></li>
+<li><code>postTelemetry_insertsOrUpdatesRowInDb</code> boots the full Spring context (profile <code>test</code>), posts JSON to <code>/telemetry</code>, and asserts the row is persisted in <code>telemetry.device_status_current</code>.</li>
+<li><code>postTelemetry_withoutDeviceId_returnsBadRequestAndDoesNotInsert</code> verifies a malformed request returns HTTP 400 and leaves the table empty.</li>
+</ul>
+<h2 id="7-service-2-device-state-svc">7. Service 2 – device-state-svc<a class="headerlink" href="#7-service-2-device-state-svc" title="Permanent link">&para;</a></h2>
+<h3 id="71-purpose">7.1. Purpose<a class="headerlink" href="#71-purpose" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Read the latest device status from telemetry.device_status_current.</li>
+<li>Expose REST endpoint:</li>
+<li>Internal: <code>GET /devices/{deviceId}/status</code></li>
+<li>Via Ingress: <code>GET /devices/{deviceId}/status</code>.</li>
+</ul>
+<h3 id="72-project-structure">7.2. Project Structure<a class="headerlink" href="#72-project-structure" title="Permanent link">&para;</a></h3>
+<p>Under <code>device-state-svc/</code>:</p>
+<div class="highlight"><pre><span></span><code>device-state-svc/
+  build.gradle
+  src/
+    main/
+      java/
+        com/telemetry/state/
+          DeviceStateApplication.java
+          controller/DeviceStatusController.java
+          repo/DeviceStatusReadRepository.java
+      resources/
+        application.yaml
+</code></pre></div>
+<h3 id="73-main-application-class">7.3. Main Application Class<a class="headerlink" href="#73-main-application-class" title="Permanent link">&para;</a></h3>
+<p><code>src/main/java/com/telemetry/state/DeviceStateApplication.java</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.telemetry.state</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.SpringApplication</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="p">;</span>
+
+<span class="nd">@SpringBootApplication</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeviceStateApplication</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">DeviceStateApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="74-repository-devicestatusreadrepository">7.4. Repository – DeviceStatusReadRepository<a class="headerlink" href="#74-repository-devicestatusreadrepository" title="Permanent link">&para;</a></h3>
+<p><code>src/main/java/com/telemetry/state/repo/DeviceStatusReadRepository.java</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.telemetry.state.repo</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.jdbc.core.JdbcTemplate</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.stereotype.Repository</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.time.Instant</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Optional</span><span class="p">;</span>
+
+<span class="nd">@Repository</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeviceStatusReadRepository</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">JdbcTemplate</span><span class="w"> </span><span class="n">jdbc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">DeviceStatusReadRepository</span><span class="p">(</span><span class="n">JdbcTemplate</span><span class="w"> </span><span class="n">jdbc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">jdbc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jdbc</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">DeviceStatus</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getStatus</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">deviceId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">jdbc</span><span class="p">.</span><span class="na">query</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">            SELECT device_id, cpu_pct, mem_pct, disk_alert, updated_at</span>
+<span class="s">              FROM telemetry.device_status_current</span>
+<span class="s">             WHERE device_id = ?</span>
+<span class="s">        &quot;&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rs</span><span class="p">.</span><span class="na">next</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">empty</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">DeviceStatus</span><span class="p">(</span>
+<span class="w">                    </span><span class="n">rs</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="s">&quot;device_id&quot;</span><span class="p">),</span>
+<span class="w">                    </span><span class="n">rs</span><span class="p">.</span><span class="na">getDouble</span><span class="p">(</span><span class="s">&quot;cpu_pct&quot;</span><span class="p">),</span>
+<span class="w">                    </span><span class="n">rs</span><span class="p">.</span><span class="na">getDouble</span><span class="p">(</span><span class="s">&quot;mem_pct&quot;</span><span class="p">),</span>
+<span class="w">                    </span><span class="s">&quot;Y&quot;</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">rs</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="s">&quot;disk_alert&quot;</span><span class="p">)),</span>
+<span class="w">                    </span><span class="n">rs</span><span class="p">.</span><span class="na">getTimestamp</span><span class="p">(</span><span class="s">&quot;updated_at&quot;</span><span class="p">).</span><span class="na">toInstant</span><span class="p">()</span>
+<span class="w">            </span><span class="p">));</span>
+<span class="w">        </span><span class="p">},</span><span class="w"> </span><span class="n">deviceId</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">DeviceStatus</span><span class="p">(</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">deviceId</span><span class="p">,</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">cpuPct</span><span class="p">,</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">memPct</span><span class="p">,</span>
+<span class="w">            </span><span class="kt">boolean</span><span class="w"> </span><span class="n">diskAlert</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Instant</span><span class="w"> </span><span class="n">updatedAt</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="75-controller-devicestatuscontroller">7.5. Controller – DeviceStatusController<a class="headerlink" href="#75-controller-devicestatuscontroller" title="Permanent link">&para;</a></h3>
+<p><code>src/main/java/com/telemetry/state/controller/DeviceStatusController.java</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.telemetry.state.controller</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">com.telemetry.state.repo.DeviceStatusReadRepository</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.http.ResponseEntity</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.*</span><span class="p">;</span>
+
+<span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&quot;/devices&quot;</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeviceStatusController</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">DeviceStatusReadRepository</span><span class="w"> </span><span class="n">repo</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">DeviceStatusController</span><span class="p">(</span><span class="n">DeviceStatusReadRepository</span><span class="w"> </span><span class="n">repo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">repo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repo</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/{deviceId}/status&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="nf">getStatus</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">deviceId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">repo</span><span class="p">.</span><span class="na">getStatus</span><span class="p">(</span><span class="n">deviceId</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="o">&lt;</span><span class="n">ResponseEntity</span><span class="o">&lt;?&gt;&gt;</span><span class="n">map</span><span class="p">(</span><span class="n">ResponseEntity</span><span class="p">::</span><span class="n">ok</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="na">orElseGet</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">ResponseEntity</span><span class="p">.</span><span class="na">notFound</span><span class="p">().</span><span class="na">build</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>If row exists → HTTP 200 + JSON body of DeviceStatus.</li>
+<li>If not → HTTP 404.</li>
+</ul>
+<h3 id="76-integration-tests">7.6. Integration Tests<a class="headerlink" href="#76-integration-tests" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Location: <code>device-state-svc/src/test/java/com/telemetry/state/controller/DeviceStatusControllerIntegrationTest.java</code></li>
+<li><code>getStatus_existingDevice_returnsStatusJson</code> loads the Spring context, seeds <code>telemetry.device_status_current</code>, and asserts <code>/devices/{deviceId}/status</code> returns HTTP 200 with the serialized JSON payload.</li>
+<li><code>getStatus_unknownDevice_returns404</code> ensures an empty database results in HTTP 404 when the device is not found.</li>
+</ul>
+<h2 id="8-dockerfiles">8. Dockerfiles<a class="headerlink" href="#8-dockerfiles" title="Permanent link">&para;</a></h2>
+<p>Both services are packaged into Docker images.</p>
+<h3 id="81-agent-ingest-svcdockerfile">8.1. agent-ingest-svc/Dockerfile<a class="headerlink" href="#81-agent-ingest-svcdockerfile" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">eclipse-temurin:21-jre</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<span class="k">COPY</span><span class="w"> </span>build/libs/*.jar<span class="w"> </span>app.jar
+<span class="k">ENV</span><span class="w"> </span><span class="nv">JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;sh&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;-c&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;java $JAVA_OPTS -jar app.jar&quot;</span><span class="p">]</span>
+</code></pre></div>
+<h3 id="82-device-state-svcdockerfile">8.2. device-state-svc/Dockerfile<a class="headerlink" href="#82-device-state-svcdockerfile" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">eclipse-temurin:21-jre</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<span class="k">COPY</span><span class="w"> </span>build/libs/*.jar<span class="w"> </span>app.jar
+<span class="k">ENV</span><span class="w"> </span><span class="nv">JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;sh&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;-c&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;java $JAVA_OPTS -jar app.jar&quot;</span><span class="p">]</span>
+</code></pre></div>
+<h2 id="9-kubernetes-manifests">9. Kubernetes Manifests<a class="headerlink" href="#9-kubernetes-manifests" title="Permanent link">&para;</a></h2>
+<p>All manifests target namespace telemetry.</p>
+<h3 id="91-secret-for-oracle-credentials">9.1. Secret for Oracle Credentials<a class="headerlink" href="#91-secret-for-oracle-credentials" title="Permanent link">&para;</a></h3>
+<p><code>k8s/oracle/oracle-secret.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-credentials</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+<span class="nt">stringData</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ORACLE_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry_pw</span>
+<span class="w">  </span><span class="nt">ORACLE_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry</span>
+<span class="w">  </span><span class="nt">ORACLE_JDBC_URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:oracle:thin:@oracle-db.telemetry.svc.cluster.local:1521/XEPDB1</span>
+</code></pre></div>
+<h3 id="92-oracle-statefulset-service">9.2. Oracle StatefulSet &amp; Service<a class="headerlink" href="#92-oracle-statefulset-service" title="Permanent link">&para;</a></h3>
+<p><code>k8s/oracle/oracle-statefulset.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-db</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sql</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1521</span>
+<span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1521</span>
+<span class="w">  </span><span class="nt">clusterIP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">None</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-db</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">StatefulSet</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-db</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">serviceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-db</span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-db</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-db</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle</span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gvenzl/oracle-xe:21-slim</span>
+<span class="w">          </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ORACLE_PASSWORD</span>
+<span class="w">              </span><span class="nt">valueFrom</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">secretKeyRef</span><span class="p">:</span>
+<span class="w">                  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-credentials</span>
+<span class="w">                  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ORACLE_PASSWORD</span>
+<span class="w">          </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1521</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sql</span>
+<span class="w">          </span><span class="nt">volumeMounts</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-data</span>
+<span class="w">              </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/opt/oracle/oradata</span>
+<span class="w">      </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-data</span>
+<span class="w">          </span><span class="nt">emptyDir</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<p><strong>Note:</strong> user/schema/table creation is done separately (via sqlplus).</p>
+<h3 id="93-agent-ingest-svc-chart-deployment-service">9.3. agent-ingest-svc Chart (Deployment &amp; Service)<a class="headerlink" href="#93-agent-ingest-svc-chart-deployment-service" title="Permanent link">&para;</a></h3>
+<p><code>helm/telemetry-platform/charts/agent-ingest-svc/templates/deployment.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">agent-ingest-svc</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">agent-ingest-svc</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">agent-ingest-svc</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">agent-ingest-svc</span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">agent-ingest-svc:release1</span>
+<span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IfNotPresent</span>
+<span class="w">          </span><span class="nt">envFrom</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretRef</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-credentials</span>
+<span class="w">          </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<span class="w">          </span><span class="nt">readinessProbe</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/actuator/health</span>
+<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">            </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">agent-ingest-svc</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry</span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">prometheus.io/scrape</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+<span class="w">    </span><span class="nt">prometheus.io/path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/actuator/prometheus&quot;</span>
+<span class="w">    </span><span class="nt">prometheus.io/port</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;8080&quot;</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">agent-ingest-svc</span>
+<span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">targetPort</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+</code></pre></div>
+<h3 id="94-device-state-svc-chart-deployment-service">9.4. device-state-svc Chart (Deployment &amp; Service)<a class="headerlink" href="#94-device-state-svc-chart-deployment-service" title="Permanent link">&para;</a></h3>
+<p><code>helm/telemetry-platform/charts/device-state-svc/templates/deployment.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apps/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">device-state-svc</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">device-state-svc</span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">device-state-svc</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">device-state-svc</span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">device-state-svc:release1</span>
+<span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IfNotPresent</span>
+<span class="w">          </span><span class="nt">envFrom</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secretRef</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">oracle-credentials</span>
+<span class="w">          </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8081</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<span class="w">          </span><span class="nt">readinessProbe</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">httpGet</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/actuator/health</span>
+<span class="w">              </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8081</span>
+<span class="w">            </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">            </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">device-state-svc</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry</span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">prometheus.io/scrape</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+<span class="w">    </span><span class="nt">prometheus.io/path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/actuator/prometheus&quot;</span>
+<span class="w">    </span><span class="nt">prometheus.io/port</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;8080&quot;</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">device-state-svc</span>
+<span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8081</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+</code></pre></div>
+<h3 id="95-ingress-nginx-api-gateway-chart">9.5. Ingress – NGINX API Gateway Chart<a class="headerlink" href="#95-ingress-nginx-api-gateway-chart" title="Permanent link">&para;</a></h3>
+<p><code>helm/telemetry-platform/charts/ingress/templates/ingress.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networking.k8s.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ingress</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry-gateway</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry</span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">nginx.ingress.kubernetes.io/rewrite-target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/$1</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ingressClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry.internal</span>
+<span class="w">      </span><span class="nt">http</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/telemetry/?(.*)</span>
+<span class="w">            </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+<span class="w">            </span><span class="nt">backend</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">service</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">agent-ingest-svc</span>
+<span class="w">                </span><span class="nt">port</span><span class="p">:</span>
+<span class="w">                  </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/devices/?(.*)</span>
+<span class="w">            </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+<span class="w">            </span><span class="nt">backend</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">service</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">device-state-svc</span>
+<span class="w">                </span><span class="nt">port</span><span class="p">:</span>
+<span class="w">                  </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+</code></pre></div>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>External <code>POST /telemetry</code> → agent-ingest-svc <code>POST /telemetry</code></li>
+<li>External <code>GET /devices/{id}/status</code> → device-state-svc <code>GET /devices/{id}/status</code></li>
+</ul>
+<h3 id="96-helm-chart-structure">9.6. Helm Chart Structure<a class="headerlink" href="#96-helm-chart-structure" title="Permanent link">&para;</a></h3>
+<p>Helm charts are provided under <code>helm/telemetry-platform</code> to deploy the entire stack:</p>
+<ul>
+<li><strong>Root chart (<code>Chart.yaml</code>)</strong> aggregates four dependencies: <code>oracle</code>, <code>agent-ingest-svc</code>, <code>device-state-svc</code>, and <code>ingress</code>.</li>
+<li><strong>Global values (<code>values.yaml</code>)</strong> provide shared settings:</li>
+<li><code>global.namespace</code> = <code>telemetry</code></li>
+<li><code>global.oracle</code> = default Oracle credentials and JDBC URL (overridable per environment)</li>
+<li>Dependency overrides use the dependency names (<code>agent-ingest-svc</code>, <code>device-state-svc</code>, <code>ingress</code>) to set images, replica counts, ports, and host.</li>
+<li><strong>Oracle subchart (<code>charts/oracle</code>)</strong> provisions:</li>
+<li><code>Secret</code> (<code>oracle-credentials</code>) using global credentials</li>
+<li>Optional PVC (enabled by default, size 10Gi)</li>
+<li>StatefulSet <code>oracle-db</code> using image <code>gvenzl/oracle-xe:21-slim</code></li>
+<li><strong>Service subcharts</strong> (<code>charts/agent-ingest-svc</code>, <code>charts/device-state-svc</code>) create Deployments and Services that mirror the Kubernetes manifests in sections 9.3 and 9.4. Notable defaults:</li>
+<li><code>agent-ingest-svc</code>: replicas=2, container port 8080</li>
+<li><code>device-state-svc</code>: replicas=1, container port 8081 (Service still exposed on port 8080, targeting 8081)</li>
+<li><strong>Ingress subchart (<code>charts/ingress</code>)</strong> exposes the API via host <code>telemetry.internal</code> with the same path routing as section 9.5.</li>
+<li><strong>Install example</strong>:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>--install<span class="w"> </span>telemetry-platform<span class="w"> </span>./helm/telemetry-platform<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="w"> </span>telemetry<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--create-namespace
+</code></pre></div>
+<p>Override values (for example, container images) using <code>-f custom-values.yaml</code> or <code>--set dependencyName.image=...</code>.</p>
+<h2 id="10-local-kubernetes-deployment-sanity-check">10. Local Kubernetes Deployment (Sanity Check)<a class="headerlink" href="#10-local-kubernetes-deployment-sanity-check" title="Permanent link">&para;</a></h2>
+<p>This flow mirrors the contributor quickstart in <code>README.md</code>.</p>
+<ol>
+<li>
+<p><strong>Build the services</strong>
+   <div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>clean<span class="w"> </span>build
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Build Docker images</strong>
+   <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>agent-ingest-svc:release1<span class="w"> </span>./agent-ingest-svc
+docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>device-state-svc:release1<span class="w"> </span>./device-state-svc
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Create Kind cluster with ingress ports</strong>
+   <div class="highlight"><pre><span></span><code>kind<span class="w"> </span>create<span class="w"> </span>cluster<span class="w"> </span>--name<span class="w"> </span>telemetry<span class="w"> </span>--config<span class="w"> </span>kind-config.yaml
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Load images into Kind</strong>
+   <div class="highlight"><pre><span></span><code>kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>agent-ingest-svc:release1<span class="w"> </span>--name<span class="w"> </span>telemetry
+kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>device-state-svc:release1<span class="w"> </span>--name<span class="w"> </span>telemetry
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Install NGINX Ingress (if absent)</strong>
+   <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Deploy with Helm</strong>
+   <div class="highlight"><pre><span></span><code>helm<span class="w"> </span>dependency<span class="w"> </span>update<span class="w"> </span>helm/telemetry-platform
+helm<span class="w"> </span>upgrade<span class="w"> </span>--install<span class="w"> </span>telemetry-platform<span class="w"> </span>./helm/telemetry-platform<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="w"> </span>telemetry<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--create-namespace
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Map ingress host locally</strong>
+   <div class="highlight"><pre><span></span><code>127.0.0.1 telemetry.internal
+</code></pre></div>
+   Add the entry above to <code>/etc/hosts</code>.</p>
+</li>
+<li>
+<p><strong>Smoke-test the APIs</strong>
+   <div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://telemetry.internal/telemetry<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">        &quot;deviceId&quot;: &quot;laptop-4421&quot;,</span>
+<span class="s1">        &quot;cpu&quot;: 0.82,</span>
+<span class="s1">        &quot;mem&quot;: 0.73,</span>
+<span class="s1">        &quot;diskAlert&quot;: false,</span>
+<span class="s1">        &quot;timestamp&quot;: &quot;2025-11-02T18:22:00Z&quot;,</span>
+<span class="s1">        &quot;processes&quot;: []</span>
+<span class="s1">      }&#39;</span>
+
+curl<span class="w"> </span>http://telemetry.internal/devices/laptop-4421/status
+</code></pre></div></p>
+</li>
+</ol>
+<p>Expect HTTP 200 with device telemetry JSON.</p>
+<ol>
+<li><strong>Automated reset &amp; deployment</strong></li>
+<li>Run <code>./reset.sh</code> to execute the full workflow automatically. The script deletes and recreates the Kind cluster, rebuilds services, builds and loads Docker images, installs/updates the NGINX ingress controller, deploys the Helm chart, waits for pods, and runs smoke tests from inside the cluster.</li>
+</ol>
+<h2 id="11-acceptance-criteria">11. Acceptance Criteria<a class="headerlink" href="#11-acceptance-criteria" title="Permanent link">&para;</a></h2>
+<p>Release 1 is considered correctly implemented when:</p>
+<ul>
+<li>Both services compile and pass tests.</li>
+<li>Docker images can be built using the provided Dockerfiles.</li>
+<li>Kubernetes manifests apply cleanly in the telemetry namespace.</li>
+<li>Oracle XE is reachable and device_status_current exists.</li>
+<li>A <code>POST /telemetry</code> followed by <code>GET /devices/{id}/status</code> works end-to-end.</li>
+<li><code>/actuator/health</code> returns UP for both services.</li>
+<li><code>/actuator/prometheus</code> is exposed and scrapes metrics for future Prometheus usage.</li>
+</ul>
+<p>End of specification.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": [], "search": "assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

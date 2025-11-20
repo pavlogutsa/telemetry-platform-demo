@@ -1,0 +1,1914 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="12-troubleshooting.html">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Terragrunt deployment - Telemetry Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.618322db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#local-development-guide-running-telemetry-platform-on-kind" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Telemetry Platform" class="md-header__button md-logo" aria-label="Telemetry Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Telemetry Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Terragrunt deployment
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pavlogutsa/telemetry-platform-demo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Telemetry Platform" class="md-nav__button md-logo" aria-label="Telemetry Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Telemetry Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pavlogutsa/telemetry-platform-demo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="01-vision-scope.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vision & Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="02-architecture.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="03-data-design.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data & Messaging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="04-api/openapi-ingest.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="04-api/openapi-device-state.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device State API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Specs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="11-release1-spec.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release 1 Spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="05-infrastructure.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="06-testing-strategy.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="07-observability.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="08-security.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="09-release-roadmap.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="10-future-notes.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Future Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="12-troubleshooting.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terragrunt deployment
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="13-terragrunt-deployment.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terragrunt deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-build-and-load-local-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Build and Load Local Images
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Build and Load Local Images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-build-java-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Build Java services
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-build-docker-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Build Docker images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-load-images-into-kind-after-cluster-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Load images into Kind (after cluster exists)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-deploy-the-local-kind-environment-using-terragrunt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 🚢 Deploy the Local Kind Environment Using Terragrunt
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 🚢 Deploy the Local Kind Environment Using Terragrunt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-create-the-kind-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Create the Kind Cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-deploy-ingress-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Deploy ingress-nginx
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-deploy-the-telemetry-platform-helm-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Deploy the telemetry platform Helm release
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-verification-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 🔍 Verification Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 🔍 Verification Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-namespace-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Namespace exists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-pods-are-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Pods are running
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-ingress-is-configured" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Ingress is configured
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-add-host-entry-only-once" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Add host entry (only once)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-end-to-end-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 End-to-end test
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#imagepullbackoff-errimagepull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ImagePullBackOff / ErrImagePull
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#curl-connection-refused-for-telemetryinternal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        curl: Connection refused for telemetry.internal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terraformterragrunt-error-context-kind-telemetry-does-not-exist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        terraform/terragrunt error: context "kind-telemetry" does not exist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helm-release-stuck-on-still-creating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Helm release stuck on Still creating...
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingress-controller-pending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingress controller Pending
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unable-to-resolve-telemetryinternal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unable to resolve telemetry.internal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-appendix-all-commands-used-in-this-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Appendix — All Commands Used in This Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Appendix — All Commands Used in This Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kind-cluster-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kind Cluster Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terragrunt-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terragrunt Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-image-build-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker Image Build + Load
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kubernetes Debugging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingress-dns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingress + DNS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-build-and-load-local-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Build and Load Local Images
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Build and Load Local Images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-build-java-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Build Java services
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-build-docker-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Build Docker images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-load-images-into-kind-after-cluster-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Load images into Kind (after cluster exists)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-deploy-the-local-kind-environment-using-terragrunt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 🚢 Deploy the Local Kind Environment Using Terragrunt
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 🚢 Deploy the Local Kind Environment Using Terragrunt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-create-the-kind-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Create the Kind Cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-deploy-ingress-nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Deploy ingress-nginx
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-deploy-the-telemetry-platform-helm-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Deploy the telemetry platform Helm release
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-verification-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 🔍 Verification Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 🔍 Verification Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-namespace-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Namespace exists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-pods-are-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Pods are running
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-ingress-is-configured" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Ingress is configured
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-add-host-entry-only-once" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Add host entry (only once)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-end-to-end-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 End-to-end test
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#imagepullbackoff-errimagepull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ImagePullBackOff / ErrImagePull
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#curl-connection-refused-for-telemetryinternal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        curl: Connection refused for telemetry.internal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terraformterragrunt-error-context-kind-telemetry-does-not-exist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        terraform/terragrunt error: context "kind-telemetry" does not exist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helm-release-stuck-on-still-creating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Helm release stuck on Still creating...
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingress-controller-pending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingress controller Pending
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unable-to-resolve-telemetryinternal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unable to resolve telemetry.internal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-appendix-all-commands-used-in-this-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Appendix — All Commands Used in This Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Appendix — All Commands Used in This Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kind-cluster-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kind Cluster Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terragrunt-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terragrunt Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-image-build-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker Image Build + Load
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kubernetes Debugging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ingress-dns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ingress + DNS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="local-development-guide-running-telemetry-platform-on-kind">Local Development Guide: Running Telemetry Platform on Kind<a class="headerlink" href="#local-development-guide-running-telemetry-platform-on-kind" title="Permanent link">&para;</a></h1>
+<p>This guide explains how a new developer can deploy the Telemetry Platform locally using:</p>
+<ul>
+<li><strong>Kind</strong> (Kubernetes-in-Docker)</li>
+<li><strong>Terragrunt</strong></li>
+<li><strong>Helm</strong></li>
+<li><strong>Local Docker images</strong></li>
+</ul>
+<p>By the end you will have a full local environment running:</p>
+<ul>
+<li>Oracle XE</li>
+<li>agent-ingest service</li>
+<li>device-state service</li>
+<li>ingress-nginx</li>
+<li>the telemetry gateway at: <code>http://telemetry.internal/telemetry</code></li>
+</ul>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<p>Install the following tools:</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Version</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker Desktop</td>
+<td>latest</td>
+<td>Linux containers required</td>
+</tr>
+<tr>
+<td>Kind</td>
+<td>≥ 0.20</td>
+<td>kind cluster runner</td>
+</tr>
+<tr>
+<td>Kubectl</td>
+<td>≥ 1.25</td>
+<td>Kubernetes CLI</td>
+</tr>
+<tr>
+<td>Terraform</td>
+<td>≥ 1.5</td>
+<td>indirectly used via Terragrunt</td>
+</tr>
+<tr>
+<td>Terragrunt</td>
+<td>≥ 0.93</td>
+<td>runs Terraform modules</td>
+</tr>
+<tr>
+<td>Helm</td>
+<td>≥ 3.x</td>
+<td>chart installer</td>
+</tr>
+<tr>
+<td>Gradle</td>
+<td>included via wrapper</td>
+<td>build services</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-build-and-load-local-images">1. Build and Load Local Images<a class="headerlink" href="#1-build-and-load-local-images" title="Permanent link">&para;</a></h2>
+<p>First, build the services and load their Docker images into the Kind cluster.</p>
+<h3 id="11-build-java-services">1.1 Build Java services<a class="headerlink" href="#11-build-java-services" title="Permanent link">&para;</a></h3>
+<p>From project root:</p>
+<div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>:agent-ingest-svc:build<span class="w"> </span>:device-state-svc:build
+</code></pre></div>
+<h3 id="12-build-docker-images">1.2 Build Docker images<a class="headerlink" href="#12-build-docker-images" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>telemetry/agent-ingest-svc:local<span class="w"> </span>agent-ingest-svc
+docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>telemetry/device-state-svc:local<span class="w"> </span>device-state-svc
+</code></pre></div>
+<blockquote>
+<p><strong>Note:</strong> These tags must match what the Helm chart expects.</p>
+</blockquote>
+<h3 id="13-load-images-into-kind-after-cluster-exists">1.3 Load images into Kind (after cluster exists)<a class="headerlink" href="#13-load-images-into-kind-after-cluster-exists" title="Permanent link">&para;</a></h3>
+<p>Once the Kind cluster is created (next section), run:</p>
+<div class="highlight"><pre><span></span><code>kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>telemetry/agent-ingest-svc:local<span class="w"> </span>--name<span class="w"> </span>telemetry
+kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>telemetry/device-state-svc:local<span class="w"> </span>--name<span class="w"> </span>telemetry
+</code></pre></div>
+<h2 id="2-deploy-the-local-kind-environment-using-terragrunt">2. 🚢 Deploy the Local Kind Environment Using Terragrunt<a class="headerlink" href="#2-deploy-the-local-kind-environment-using-terragrunt" title="Permanent link">&para;</a></h2>
+<p>All infrastructure components are managed through <code>infra/live/dev</code>.</p>
+<p>The environment consists of:</p>
+<ul>
+<li>Kind cluster (with ingress host port mappings)</li>
+<li>Ingress-nginx (Kind provider variant)</li>
+<li>Telemetry Platform Helm chart</li>
+</ul>
+<p>We apply each unit explicitly.</p>
+<h3 id="21-create-the-kind-cluster">2.1 Create the Kind Cluster<a class="headerlink" href="#21-create-the-kind-cluster" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>infra/live/dev/platform/kind-cluster
+terragrunt<span class="w"> </span>apply
+</code></pre></div>
+<p>This:</p>
+<ul>
+<li>Creates the Kind cluster <code>telemetry</code></li>
+<li>Adds the <code>ingress-ready=true</code> label</li>
+<li>Maps host ports 80 → 80 and 443 → 443</li>
+</ul>
+<p><strong>Verify:</strong></p>
+<div class="highlight"><pre><span></span><code>kind<span class="w"> </span>get<span class="w"> </span>clusters
+kubectl<span class="w"> </span>get<span class="w"> </span>nodes
+kubectl<span class="w"> </span>config<span class="w"> </span>get-contexts<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>kind-telemetry
+</code></pre></div>
+<h3 id="22-deploy-ingress-nginx">2.2 Deploy ingress-nginx<a class="headerlink" href="#22-deploy-ingress-nginx" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>../ingress-nginx
+terragrunt<span class="w"> </span>apply
+</code></pre></div>
+<p><strong>Verify:</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>ingress-nginx
+kubectl<span class="w"> </span>get<span class="w"> </span>ingressclass
+</code></pre></div>
+<h3 id="23-deploy-the-telemetry-platform-helm-release">2.3 Deploy the telemetry platform Helm release<a class="headerlink" href="#23-deploy-the-telemetry-platform-helm-release" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>../telemetry-platform
+terragrunt<span class="w"> </span>apply
+</code></pre></div>
+<p>This installs:</p>
+<ul>
+<li>Oracle DB</li>
+<li>agent-ingest-svc</li>
+<li>device-state-svc</li>
+<li>Ingress with host: <code>telemetry.internal</code></li>
+</ul>
+<h2 id="3-verification-checklist">3. 🔍 Verification Checklist<a class="headerlink" href="#3-verification-checklist" title="Permanent link">&para;</a></h2>
+<h3 id="31-namespace-exists">3.1 Namespace exists<a class="headerlink" href="#31-namespace-exists" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ns
+</code></pre></div>
+<p><strong>Expected:</strong> <code>telemetry</code> and <code>ingress-nginx</code></p>
+<h3 id="32-pods-are-running">3.2 Pods are running<a class="headerlink" href="#32-pods-are-running" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>telemetry
+</code></pre></div>
+<p><strong>Expected:</strong></p>
+<div class="highlight"><pre><span></span><code>agent-ingest-svc-xxxxx     Running
+agent-ingest-svc-yyyyy     Running
+device-state-svc-zzzzz     Running
+oracle-db-0                Running
+</code></pre></div>
+<h3 id="33-ingress-is-configured">3.3 Ingress is configured<a class="headerlink" href="#33-ingress-is-configured" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ingress<span class="w"> </span>-n<span class="w"> </span>telemetry
+</code></pre></div>
+<p><strong>Expected:</strong></p>
+<div class="highlight"><pre><span></span><code>telemetry-gateway   telemetry.internal   80
+</code></pre></div>
+<h3 id="34-add-host-entry-only-once">3.4 Add host entry (only once)<a class="headerlink" href="#34-add-host-entry-only-once" title="Permanent link">&para;</a></h3>
+<p>Edit <code>/etc/hosts</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;127.0.0.1 telemetry.internal&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/hosts
+</code></pre></div>
+<h3 id="35-end-to-end-test">3.5 End-to-end test<a class="headerlink" href="#35-end-to-end-test" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-v<span class="w"> </span>http://telemetry.internal/telemetry<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">        &quot;deviceId&quot;: &quot;local-test&quot;,</span>
+<span class="s1">        &quot;cpu&quot;: 0.5,</span>
+<span class="s1">        &quot;mem&quot;: 0.2,</span>
+<span class="s1">        &quot;diskAlert&quot;: false,</span>
+<span class="s1">        &quot;timestamp&quot;: &quot;2025-11-02T18:22:00Z&quot;,</span>
+<span class="s1">        &quot;processes&quot;: []</span>
+<span class="s1">      }&#39;</span>
+</code></pre></div>
+<p><strong>Expected:</strong></p>
+<div class="highlight"><pre><span></span><code>HTTP/1.1 202 Accepted
+</code></pre></div>
+<h2 id="4-troubleshooting">4. Troubleshooting<a class="headerlink" href="#4-troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="imagepullbackoff-errimagepull">ImagePullBackOff / ErrImagePull<a class="headerlink" href="#imagepullbackoff-errimagepull" title="Permanent link">&para;</a></h3>
+<p><strong>Cause:</strong> images were not loaded into Kind.</p>
+<p><strong>Fix:</strong></p>
+<div class="highlight"><pre><span></span><code>kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>telemetry/agent-ingest-svc:local<span class="w"> </span>--name<span class="w"> </span>telemetry
+kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>telemetry/device-state-svc:local<span class="w"> </span>--name<span class="w"> </span>telemetry
+kubectl<span class="w"> </span>rollout<span class="w"> </span>restart<span class="w"> </span>deployment/agent-ingest-svc<span class="w"> </span>-n<span class="w"> </span>telemetry
+kubectl<span class="w"> </span>rollout<span class="w"> </span>restart<span class="w"> </span>deployment/device-state-svc<span class="w"> </span>-n<span class="w"> </span>telemetry
+</code></pre></div>
+<h3 id="curl-connection-refused-for-telemetryinternal">curl: Connection refused for telemetry.internal<a class="headerlink" href="#curl-connection-refused-for-telemetryinternal" title="Permanent link">&para;</a></h3>
+<p><strong>Check:</strong></p>
+<ol>
+<li>Is ingress-nginx running?</li>
+</ol>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>ingress-nginx
+</code></pre></div>
+<ol>
+<li>Does <code>/etc/hosts</code> contain:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>127.0.0.1 telemetry.internal
+</code></pre></div>
+<ol>
+<li>Is Kind mapping hostPort 80 → container?</li>
+</ol>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>inspect<span class="w"> </span>telemetry-control-plane<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;&quot;80/tcp&quot;&#39;</span>
+</code></pre></div>
+<h3 id="terraformterragrunt-error-context-kind-telemetry-does-not-exist">terraform/terragrunt error: context "kind-telemetry" does not exist<a class="headerlink" href="#terraformterragrunt-error-context-kind-telemetry-does-not-exist" title="Permanent link">&para;</a></h3>
+<p><strong>Cause:</strong> You deleted the cluster but ran <code>terragrunt plan</code> before recreating it.</p>
+<p><strong>Fix:</strong> Recreate cluster first:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>infra/live/dev/platform/kind-cluster
+terragrunt<span class="w"> </span>apply
+</code></pre></div>
+<h3 id="helm-release-stuck-on-still-creating">Helm release stuck on Still creating...<a class="headerlink" href="#helm-release-stuck-on-still-creating" title="Permanent link">&para;</a></h3>
+<p>Usually caused by image pull failures.</p>
+<p><strong>Check:</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>telemetry
+</code></pre></div>
+<p>If any pod is not Running, fix the pod issue (image, env, container port), then rerun:</p>
+<div class="highlight"><pre><span></span><code>terragrunt<span class="w"> </span>apply
+</code></pre></div>
+<h3 id="ingress-controller-pending">Ingress controller Pending<a class="headerlink" href="#ingress-controller-pending" title="Permanent link">&para;</a></h3>
+<p><strong>Cause:</strong> missing node label <code>ingress-ready=true</code>.</p>
+<p><strong>Fix:</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>label<span class="w"> </span>node<span class="w"> </span>telemetry-control-plane<span class="w"> </span>ingress-ready<span class="o">=</span><span class="nb">true</span><span class="w"> </span>--overwrite
+</code></pre></div>
+<h3 id="unable-to-resolve-telemetryinternal">Unable to resolve telemetry.internal<a class="headerlink" href="#unable-to-resolve-telemetryinternal" title="Permanent link">&para;</a></h3>
+<p><strong>Check DNS/hosts:</strong></p>
+<div class="highlight"><pre><span></span><code>dig<span class="w"> </span>telemetry.internal
+</code></pre></div>
+<p>If empty:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;127.0.0.1 telemetry.internal&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/hosts
+</code></pre></div>
+<h2 id="5-appendix-all-commands-used-in-this-guide">5. Appendix — All Commands Used in This Guide<a class="headerlink" href="#5-appendix-all-commands-used-in-this-guide" title="Permanent link">&para;</a></h2>
+<p>Below is every command referenced throughout this onboarding process, grouped by purpose.</p>
+<h3 id="kind-cluster-management">Kind Cluster Management<a class="headerlink" href="#kind-cluster-management" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>kind<span class="w"> </span>get<span class="w"> </span>clusters
+kind<span class="w"> </span>delete<span class="w"> </span>cluster<span class="w"> </span>--name<span class="w"> </span>telemetry
+kind<span class="w"> </span>create<span class="w"> </span>cluster<span class="w"> </span>--config<span class="w"> </span>kind-config.yaml<span class="w"> </span>--name<span class="w"> </span>telemetry
+</code></pre></div>
+<h3 id="terragrunt-deployment">Terragrunt Deployment<a class="headerlink" href="#terragrunt-deployment" title="Permanent link">&para;</a></h3>
+<p><strong>Create cluster:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>infra/live/dev/platform/kind-cluster
+terragrunt<span class="w"> </span>apply
+</code></pre></div>
+<p><strong>Install ingress-nginx:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>../ingress-nginx
+terragrunt<span class="w"> </span>apply
+</code></pre></div>
+<p><strong>Install telemetry platform:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>../telemetry-platform
+terragrunt<span class="w"> </span>apply
+</code></pre></div>
+<p><strong>Run full stack plan (safe):</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>infra/live/dev
+terragrunt<span class="w"> </span>run<span class="w"> </span>--all<span class="w"> </span>plan
+</code></pre></div>
+<blockquote>
+<p><strong>Note:</strong> Do not run <code>terragrunt run --all apply</code> unless the whole environment is idempotent.</p>
+</blockquote>
+<h3 id="docker-image-build-load">Docker Image Build + Load<a class="headerlink" href="#docker-image-build-load" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>:agent-ingest-svc:build<span class="w"> </span>:device-state-svc:build
+
+docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>telemetry/agent-ingest-svc:local<span class="w"> </span>agent-ingest-svc
+docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>telemetry/device-state-svc:local<span class="w"> </span>device-state-svc
+
+kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>telemetry/agent-ingest-svc:local<span class="w"> </span>--name<span class="w"> </span>telemetry
+kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>telemetry/device-state-svc:local<span class="w"> </span>--name<span class="w"> </span>telemetry
+</code></pre></div>
+<h3 id="kubernetes-debugging">Kubernetes Debugging<a class="headerlink" href="#kubernetes-debugging" title="Permanent link">&para;</a></h3>
+<p><strong>Pods:</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>telemetry
+kubectl<span class="w"> </span>describe<span class="w"> </span>pod<span class="w"> </span>&lt;pod&gt;<span class="w"> </span>-n<span class="w"> </span>telemetry
+kubectl<span class="w"> </span>logs<span class="w"> </span>&lt;pod&gt;<span class="w"> </span>-n<span class="w"> </span>telemetry<span class="w"> </span>--all-containers<span class="o">=</span><span class="nb">true</span>
+</code></pre></div>
+<p><strong>Services, deployments, events:</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>all<span class="w"> </span>-n<span class="w"> </span>telemetry
+kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>-n<span class="w"> </span>telemetry<span class="w"> </span>--sort-by<span class="o">=</span>.lastTimestamp
+kubectl<span class="w"> </span>get<span class="w"> </span>ingress<span class="w"> </span>-n<span class="w"> </span>telemetry
+</code></pre></div>
+<p><strong>Rollout restart:</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>rollout<span class="w"> </span>restart<span class="w"> </span>deployment/&lt;name&gt;<span class="w"> </span>-n<span class="w"> </span>telemetry
+</code></pre></div>
+<h3 id="ingress-dns">Ingress + DNS<a class="headerlink" href="#ingress-dns" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>ingress-nginx
+kubectl<span class="w"> </span>get<span class="w"> </span>ingressclass
+kubectl<span class="w"> </span>describe<span class="w"> </span>ingress<span class="w"> </span>telemetry-gateway<span class="w"> </span>-n<span class="w"> </span>telemetry
+</code></pre></div>
+<p><strong>Add host entry:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;127.0.0.1 telemetry.internal&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/hosts
+</code></pre></div>
+<h3 id="api-testing">API Testing<a class="headerlink" href="#api-testing" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-v<span class="w"> </span>http://telemetry.internal/telemetry<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{ ... }&#39;</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": [], "search": "assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
