@@ -1,0 +1,16 @@
+graph LR
+  subgraph Ingress Layer
+    NGINX[NGINX Ingress / API Gateway]
+  end
+
+  Device[Device Agent] -->|POST /telemetry| NGINX
+  NGINX -->|/telemetry| Ingest[agent-ingest-svc]
+  Ingest -->|telemetry.raw| Kafka[(Kafka)]
+
+  Kafka --> Proc[telemetry-processor-svc]
+  Proc --> Redis[(Redis)]
+  Proc -->|upserts current + inserts history| Oracle[(Oracle DB)]
+
+  Operator[Operator / Dashboard] -->|GET /devices/...| NGINX
+  NGINX --> State[device-state-svc]
+  State -->|SELECT status/history| Oracle

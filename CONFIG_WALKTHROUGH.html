@@ -1,0 +1,5744 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Telemetry Platform Config Walkthrough (Infra + Helm) - Telemetry Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#telemetry-platform-config-walkthrough-infra-helm" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Telemetry Platform" class="md-header__button md-logo" aria-label="Telemetry Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Telemetry Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Telemetry Platform Config Walkthrough (Infra + Helm)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pavlogutsa/telemetry-platform-demo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Telemetry Platform" class="md-nav__button md-logo" aria-label="Telemetry Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Telemetry Platform
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pavlogutsa/telemetry-platform-demo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="01-vision-scope.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vision & Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="02-architecture.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="03-data-design.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data & Messaging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="04-api/openapi-ingest.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ingest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="04-api/openapi-device-state.yaml" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Device State API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Specs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="11-release1-spec.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release 1 Spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="05-infrastructure.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="06-testing-strategy.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="07-observability.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="08-security.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="09-release-roadmap.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="10-future-notes.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Future Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="12-troubleshooting.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="13-terragrunt-deployment.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terragrunt deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#infraterragrunthcl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/terragrunt.hcl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/terragrunt.hcl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infralivedevplatformingress-nginxterragrunthcl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/dev/platform/ingress-nginx/terragrunt.hcl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/dev/platform/ingress-nginx/terragrunt.hcl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infralivedevplatformkind-clusterkind-configyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/dev/platform/kind-cluster/kind-config.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/dev/platform/kind-cluster/kind-config.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infralivedevplatformkind-clusterterragrunthcl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/dev/platform/kind-cluster/terragrunt.hcl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/dev/platform/kind-cluster/terragrunt.hcl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infralivedevplatformtelemetry-platformterragrunthcl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/dev/platform/telemetry-platform/terragrunt.hcl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/dev/platform/telemetry-platform/terragrunt.hcl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infralivedevprovidersgeneratedtf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/dev/providers.generated.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/dev/providers.generated.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infralivedevterragrunthcl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/dev/terragrunt.hcl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/dev/terragrunt.hcl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infraliveprodnetworkvpcterragrunthcl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/prod/network/vpc/terragrunt.hcl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/prod/network/vpc/terragrunt.hcl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infraliveprodplatformecrterragrunthcl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/prod/platform/ecr/terragrunt.hcl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/prod/platform/ecr/terragrunt.hcl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infraliveprodplatformeksterragrunthcl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/prod/platform/eks/terragrunt.hcl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/prod/platform/eks/terragrunt.hcl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-dependencies-work-here" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How dependencies work here
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infraliveprodplatformrdsterragrunthcl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/prod/platform/rds/terragrunt.hcl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/prod/platform/rds/terragrunt.hcl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-dependencies-work-here_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How dependencies work here
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infraliveprodplatformtelemetry-platformterragrunthcl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/prod/platform/telemetry-platform/terragrunt.hcl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/prod/platform/telemetry-platform/terragrunt.hcl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-dependencies-work-here_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How dependencies work here
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infraliveprodterragrunthcl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/live/prod/terragrunt.hcl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/live/prod/terragrunt.hcl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulesecrmaintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/ecr/main.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/ecr/main.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulesecroutputstf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/ecr/outputs.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/ecr/outputs.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulesecrvariablestf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/ecr/variables.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/ecr/variables.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframoduleseksmaintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/eks/main.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/eks/main.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframoduleseksoutputstf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/eks/outputs.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/eks/outputs.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframoduleseksvariablestf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/eks/variables.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/eks/variables.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulesingress-nginx-localmaintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/ingress-nginx-local/main.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/ingress-nginx-local/main.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframoduleskind-cluster-localmaintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/kind-cluster-local/main.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/kind-cluster-local/main.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframoduleskind-cluster-localvariablestf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/kind-cluster-local/variables.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/kind-cluster-local/variables.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulesrdsmaintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/rds/main.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/rds/main.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulesrdsoutputstf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/rds/outputs.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/rds/outputs.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulesrdsvariablestf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/rds/variables.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/rds/variables.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulestelemetry-platform-eksmaintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/telemetry-platform-eks/main.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/telemetry-platform-eks/main.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulestelemetry-platform-eksvariablestf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/telemetry-platform-eks/variables.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/telemetry-platform-eks/variables.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulestelemetry-platform-localmaintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/telemetry-platform-local/main.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/telemetry-platform-local/main.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulestelemetry-platform-localvariablestf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/telemetry-platform-local/variables.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/telemetry-platform-local/variables.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulesvpcmaintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/vpc/main.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/vpc/main.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulesvpcoutputstf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/vpc/outputs.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/vpc/outputs.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inframodulesvpcvariablestf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra/modules/vpc/variables.tf
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra/modules/vpc/variables.tf">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/Chart.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/Chart.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsagent-ingest-svcchartyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/agent-ingest-svc/Chart.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/agent-ingest-svc/Chart.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsagent-ingest-svctemplatesdeploymentyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/agent-ingest-svc/templates/deployment.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/agent-ingest-svc/templates/deployment.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsagent-ingest-svcvaluesyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/agent-ingest-svc/values.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/agent-ingest-svc/values.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsdevice-state-svcchartyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/device-state-svc/Chart.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/device-state-svc/Chart.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsdevice-state-svctemplatesdeploymentyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/device-state-svc/templates/deployment.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/device-state-svc/templates/deployment.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsdevice-state-svcvaluesyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/device-state-svc/values.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/device-state-svc/values.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_38" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_38" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_38" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsingresschartyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/ingress/Chart.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/ingress/Chart.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_39" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_39" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_39" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsingresstemplatesingressyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/ingress/templates/ingress.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/ingress/templates/ingress.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_40" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_40" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_40" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsingressvaluesyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/ingress/values.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/ingress/values.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsoraclechartyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/oracle/Chart.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/oracle/Chart.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsoracletemplatesoracleyml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/oracle/templates/oracle.yml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/oracle/templates/oracle.yml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformchartsoraclevaluesyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/charts/oracle/values.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/charts/oracle/values.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#helmtelemetry-platformvaluesyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        helm/telemetry-platform/values.yaml
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="helm/telemetry-platform/values.yaml">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-this-file-is-for_45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What this file is for
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-contents-numbered_45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File contents (numbered)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#line-by-line-explanation-only-lines-that-introduce-a-concept_45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Line-by-line explanation (only lines that introduce a concept)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="telemetry-platform-config-walkthrough-infra-helm">Telemetry Platform Config Walkthrough (Infra + Helm)<a class="headerlink" href="#telemetry-platform-config-walkthrough-infra-helm" title="Permanent link">&para;</a></h1>
+<p>This document explains the configuration inside your <code>infra/</code> (Terragrunt/Terraform) and <code>helm/</code> (Helm charts) archives.</p>
+<p>Notes:
+- Files named <code>._*</code> are macOS metadata and are ignored.
+- Some <code>terragrunt.hcl</code> files in this archive contain a literal <code>...</code> placeholder; where that happens, I explain what that block is intended to contain based on the generated files/modules present.</p>
+<hr />
+<h2 id="infraterragrunthcl"><code>infra/terragrunt.hcl</code><a class="headerlink" href="#infraterragrunthcl" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for">What this file is for<a class="headerlink" href="#what-this-file-is-for" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terragrunt configuration. Terragrunt wraps Terraform: it wires modules together, handles remote state, and injects providers.</li>
+</ul>
+<h3 id="file-contents-numbered">File contents (numbered)<a class="headerlink" href="#file-contents-numbered" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>1| locals {
+2|   project_name = &quot;telemetry&quot;
+3| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Line 1:</strong> Starts a <code>locals</code> block - named values you can reuse in this file.</li>
+</ul>
+<hr />
+<h2 id="infralivedevplatformingress-nginxterragrunthcl"><code>infra/live/dev/platform/ingress-nginx/terragrunt.hcl</code><a class="headerlink" href="#infralivedevplatformingress-nginxterragrunthcl" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_1">What this file is for<a class="headerlink" href="#what-this-file-is-for_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terragrunt configuration. Terragrunt wraps Terraform: it wires modules together, handles remote state, and injects providers.</li>
+</ul>
+<h3 id="file-contents-numbered_1">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| include &quot;env&quot; {
+ 2|   path = find_in_parent_folders(&quot;terragrunt.hcl&quot;)
+ 3| }
+ 4| 
+ 5| terraform {
+ 6|   source = &quot;../../../../modules/ingress-nginx-local&quot;
+ 7| }
+ 8| 
+ 9| # Make sure cluster exists before installing ingress-nginx
+10| dependencies {
+11|   paths = [&quot;../kind-cluster&quot;]
+12| }
+13| 
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_1">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Terragrunt <code>include</code> - pulls in parent configuration (like common locals, remote_state, provider generation).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Searches upward for the named file and includes it - this lets child stacks inherit env-level settings.</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Terragrunt <code>terraform</code> block - tells Terragrunt where the Terraform module source is.</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+</ul>
+<hr />
+<h2 id="infralivedevplatformkind-clusterkind-configyaml"><code>infra/live/dev/platform/kind-cluster/kind-config.yaml</code><a class="headerlink" href="#infralivedevplatformkind-clusterkind-configyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_2">What this file is for<a class="headerlink" href="#what-this-file-is-for_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Supporting YAML (e.g., kind cluster config).</li>
+</ul>
+<h3 id="file-contents-numbered_2">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| kind: Cluster
+ 2| apiVersion: kind.x-k8s.io/v1alpha4
+ 3| name: telemetry
+ 4| nodes:
+ 5|   - role: control-plane
+ 6|     labels:
+ 7|       ingress-ready: &quot;true&quot;
+ 8|     extraPortMappings:
+ 9|       - containerPort: 80
+10|         hostPort: 80
+11|         protocol: TCP
+12|       - containerPort: 443
+13|         hostPort: 443
+14|         protocol: TCP
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_2">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> The type of Kubernetes object (Deployment, Service, Ingress, etc.).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Kubernetes API group/version for this object.</p>
+</li>
+</ul>
+<hr />
+<h2 id="infralivedevplatformkind-clusterterragrunthcl"><code>infra/live/dev/platform/kind-cluster/terragrunt.hcl</code><a class="headerlink" href="#infralivedevplatformkind-clusterterragrunthcl" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_3">What this file is for<a class="headerlink" href="#what-this-file-is-for_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terragrunt configuration. Terragrunt wraps Terraform: it wires modules together, handles remote state, and injects providers.</li>
+</ul>
+<h3 id="file-contents-numbered_3">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| include &quot;env&quot; {
+ 2|   path = find_in_parent_folders(&quot;terragrunt.hcl&quot;)
+ 3| }
+ 4| 
+ 5| terraform {
+ 6|   source = &quot;../../../../modules/kind-cluster-local&quot;
+ 7| }
+ 8| 
+ 9| inputs = {
+10|   cluster_name     = &quot;telemetry&quot;
+11|   kind_config_path = &quot;${get_terragrunt_dir()}/kind-config.yaml&quot;
+12| }
+13| 
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_3">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Terragrunt <code>include</code> - pulls in parent configuration (like common locals, remote_state, provider generation).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Searches upward for the named file and includes it - this lets child stacks inherit env-level settings.</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Terragrunt <code>terraform</code> block - tells Terragrunt where the Terraform module source is.</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+<li>
+<p><strong>Line 9:</strong> Inputs map passed to the Terraform module as variables.</p>
+</li>
+</ul>
+<hr />
+<h2 id="infralivedevplatformtelemetry-platformterragrunthcl"><code>infra/live/dev/platform/telemetry-platform/terragrunt.hcl</code><a class="headerlink" href="#infralivedevplatformtelemetry-platformterragrunthcl" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_4">What this file is for<a class="headerlink" href="#what-this-file-is-for_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terragrunt configuration. Terragrunt wraps Terraform: it wires modules together, handles remote state, and injects providers.</li>
+</ul>
+<h3 id="file-contents-numbered_4">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_4" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| include &quot;env&quot; {
+ 2|   path = find_in_parent_folders(&quot;terragrunt.hcl&quot;)
+ 3| }
+ 4| 
+ 5| terraform {
+ 6|   source = &quot;../../../../modules/telemetry-platform-local&quot;
+ 7| }
+ 8| 
+ 9| dependencies {
+10|   paths = [
+11|     &quot;../kind-cluster&quot;,
+12|     &quot;../ingress-nginx&quot;,
+13|   ]
+14| }
+15| 
+16| inputs = {
+17|   namespace = &quot;telemetry&quot;
+18| 
+19|   chart_path = &quot;${get_terragrunt_dir()}/../../../../helm/telemetry-platform&quot;
+20|   
+21|   oracle_user     = &quot;telemetry&quot;
+22|   oracle_password = &quot;telemetry_pw&quot;
+23|   oracle_jdbc_url = &quot;jdbc:oracle:thin:@oracle-db.telemetry.svc.cluster.local:1521/XEPDB1&quot;
+24| 
+25|   agent_ingest_image    = &quot;telemetry/agent-ingest-svc:local&quot;
+26|   agent_ingest_replicas = 2
+27| 
+28|   device_state_image          = &quot;telemetry/device-state-svc:local&quot;
+29|   device_state_replicas       = 1
+30|   device_state_container_port = 8081
+31|   device_state_service_port   = 8080
+32| 
+33|   ingress_host = &quot;telemetry.internal&quot; # or telemetry.local
+34| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_4">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Terragrunt <code>include</code> - pulls in parent configuration (like common locals, remote_state, provider generation).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Searches upward for the named file and includes it - this lets child stacks inherit env-level settings.</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Terragrunt <code>terraform</code> block - tells Terragrunt where the Terraform module source is.</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+<li>
+<p><strong>Line 16:</strong> Inputs map passed to the Terraform module as variables.</p>
+</li>
+</ul>
+<hr />
+<h2 id="infralivedevprovidersgeneratedtf"><code>infra/live/dev/providers.generated.tf</code><a class="headerlink" href="#infralivedevprovidersgeneratedtf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_5">What this file is for<a class="headerlink" href="#what-this-file-is-for_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_5">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_5" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| # Generated by Terragrunt. Sig: nIlQXj57tbuaRZEa
+ 2| terraform {
+ 3|   required_version = &quot;&gt;= 1.8.0&quot;
+ 4| 
+ 5|   required_providers {
+ 6|     helm = {
+ 7|       source  = &quot;hashicorp/helm&quot;
+ 8|       version = &quot;~&gt; 2.0&quot;
+ 9|     }
+10|     kubernetes = {
+11|       source  = &quot;hashicorp/kubernetes&quot;
+12|       version = &quot;~&gt; 2.0&quot;
+13|     }
+14|   }
+15| }
+16| 
+17| provider &quot;kubernetes&quot; {
+18|   config_path    = &quot;~/.kube/config&quot;
+19|   config_context = &quot;kind-telemetry&quot; # TODO: set your kind context
+20| }
+21| 
+22| provider &quot;helm&quot; {
+23|   kubernetes {
+24|     config_path    = &quot;~/.kube/config&quot;
+25|     config_context = &quot;kind-telemetry&quot;
+26|   }
+27| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_5">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 2:</strong> Terraform settings block (required versions, provider requirements).</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Declares which providers (AWS/Kubernetes/Helm/etc.) this module needs.</p>
+</li>
+<li>
+<p><strong>Line 17:</strong> Configures a provider instance (how Terraform authenticates/talks to that API).</p>
+</li>
+<li>
+<p><strong>Line 22:</strong> Configures a provider instance (how Terraform authenticates/talks to that API).</p>
+</li>
+</ul>
+<hr />
+<h2 id="infralivedevterragrunthcl"><code>infra/live/dev/terragrunt.hcl</code><a class="headerlink" href="#infralivedevterragrunthcl" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_6">What this file is for<a class="headerlink" href="#what-this-file-is-for_6" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terragrunt configuration. Terragrunt wraps Terraform: it wires modules together, handles remote state, and injects providers.</li>
+</ul>
+<h3 id="file-contents-numbered_6">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_6" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| locals {
+ 2|   project_name = &quot;telemetry&quot;
+ 3|   environment  = &quot;dev&quot;
+ 4| 
+ 5|   tags = {
+ 6|     Project     = local.project_name
+ 7|     Environment = local.environment
+ 8|     ManagedBy   = &quot;terragrunt&quot;
+ 9|   }
+10| }
+11| 
+12| generate &quot;providers&quot; {
+13|   path      = &quot;providers.generated.tf&quot;
+14|   if_exists = &quot;overwrite_terragrunt&quot;
+15|   contents  = &lt;&lt;EOC
+16| terraform {
+17|   required_version = &quot;&gt;= 1.8.0&quot;
+18| 
+19|   required_providers {
+20|     helm = {
+21|       source  = &quot;hashicorp/helm&quot;
+22|       version = &quot;~&gt; 2.0&quot;
+23|     }
+24|     kubernetes = {
+25|       source  = &quot;hashicorp/kubernetes&quot;
+26|       version = &quot;~&gt; 2.0&quot;
+27|     }
+28|   }
+29| }
+30| 
+31| provider &quot;kubernetes&quot; {
+32|   config_path    = &quot;~/.kube/config&quot;
+33|   config_context = &quot;kind-telemetry&quot;  # TODO: set your kind context
+34| }
+35| 
+36| provider &quot;helm&quot; {
+37|   kubernetes {
+38|     config_path    = &quot;~/.kube/config&quot;
+39|     config_context = &quot;kind-telemetry&quot;
+40|   }
+41| }
+42| EOC
+43| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_6">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_6" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Starts a <code>locals</code> block - named values you can reuse in this file.</p>
+</li>
+<li>
+<p><strong>Line 12:</strong> Terragrunt generate - writes a file into the working dir before running Terraform (commonly providers).</p>
+</li>
+<li>
+<p><strong>Line 16:</strong> Terragrunt <code>terraform</code> block - tells Terragrunt where the Terraform module source is.</p>
+</li>
+<li>
+<p><strong>Line 21:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+<li>
+<p><strong>Line 25:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+<li>
+<p><strong>Line 32:</strong> Backend configuration map.</p>
+</li>
+<li>
+<p><strong>Line 33:</strong> Backend configuration map.</p>
+</li>
+<li>
+<p><strong>Line 38:</strong> Backend configuration map.</p>
+</li>
+<li>
+<p><strong>Line 39:</strong> Backend configuration map.</p>
+</li>
+</ul>
+<hr />
+<h2 id="infraliveprodnetworkvpcterragrunthcl"><code>infra/live/prod/network/vpc/terragrunt.hcl</code><a class="headerlink" href="#infraliveprodnetworkvpcterragrunthcl" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_7">What this file is for<a class="headerlink" href="#what-this-file-is-for_7" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terragrunt configuration. Terragrunt wraps Terraform: it wires modules together, handles remote state, and injects providers.</li>
+</ul>
+<h3 id="file-contents-numbered_7">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_7" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| include &quot;env&quot; {
+ 2|   path = find_in_parent_folders(&quot;terragrunt.hcl&quot;)
+ 3| }
+ 4| 
+ 5| terraform {
+ 6|   source = &quot;../../../modules/vpc&quot;
+ 7| }
+ 8| 
+ 9| inputs = {
+10|   name       = &quot;telemetry-vpc-prod&quot;
+11|   cidr_block = &quot;10.0.0.0/16&quot;
+12| 
+13|   azs = [
+14|     &quot;us-east-1a&quot;,
+15|     &quot;us-east-1b&quot;,
+16|   ]
+17| 
+18|   private_subnets = [
+19|     &quot;10.0.1.0/24&quot;,
+20|     &quot;10.0.2.0/24&quot;,
+21|   ]
+22| 
+23|   public_subnets = [
+24|     &quot;10.0.101.0/24&quot;,
+25|     &quot;10.0.102.0/24&quot;,
+26|   ]
+27| 
+28|   common_tags = local.tags
+29| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_7">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_7" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Terragrunt <code>include</code> - pulls in parent configuration (like common locals, remote_state, provider generation).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Searches upward for the named file and includes it - this lets child stacks inherit env-level settings.</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Terragrunt <code>terraform</code> block - tells Terragrunt where the Terraform module source is.</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+<li>
+<p><strong>Line 9:</strong> Inputs map passed to the Terraform module as variables.</p>
+</li>
+</ul>
+<hr />
+<h2 id="infraliveprodplatformecrterragrunthcl"><code>infra/live/prod/platform/ecr/terragrunt.hcl</code><a class="headerlink" href="#infraliveprodplatformecrterragrunthcl" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_8">What this file is for<a class="headerlink" href="#what-this-file-is-for_8" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terragrunt configuration. Terragrunt wraps Terraform: it wires modules together, handles remote state, and injects providers.</li>
+</ul>
+<h3 id="file-contents-numbered_8">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_8" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| include &quot;env&quot; {
+ 2|   path = find_in_parent_folders(&quot;terragrunt.hcl&quot;)
+ 3| }
+ 4| 
+ 5| terraform {
+ 6|   source = &quot;../../../modules/ecr&quot;
+ 7| }
+ 8| 
+ 9| inputs = {
+10|   repositories = [
+11|     &quot;telemetry/agent-ingest-svc&quot;,
+12|     &quot;telemetry/device-state-svc&quot;,
+13|   ]
+14|   common_tags = local.tags
+15| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_8">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_8" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Terragrunt <code>include</code> - pulls in parent configuration (like common locals, remote_state, provider generation).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Searches upward for the named file and includes it - this lets child stacks inherit env-level settings.</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Terragrunt <code>terraform</code> block - tells Terragrunt where the Terraform module source is.</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+<li>
+<p><strong>Line 9:</strong> Inputs map passed to the Terraform module as variables.</p>
+</li>
+</ul>
+<hr />
+<h2 id="infraliveprodplatformeksterragrunthcl"><code>infra/live/prod/platform/eks/terragrunt.hcl</code><a class="headerlink" href="#infraliveprodplatformeksterragrunthcl" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_9">What this file is for<a class="headerlink" href="#what-this-file-is-for_9" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terragrunt configuration. Terragrunt wraps Terraform: it wires modules together, handles remote state, and injects providers.</li>
+</ul>
+<h3 id="file-contents-numbered_9">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_9" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| include &quot;env&quot; {
+ 2|   path = find_in_parent_folders(&quot;terragrunt.hcl&quot;)
+ 3| }
+ 4| 
+ 5| terraform {
+ 6|   source = &quot;../../../modules/eks&quot;
+ 7| }
+ 8| 
+ 9| dependency &quot;vpc&quot; {
+10|   config_path = &quot;../../network/vpc&quot;
+11| 
+12|   mock_outputs_allowed_terraform_commands = [&quot;validate&quot;, &quot;plan&quot;]
+13|   mock_outputs = {
+14|     vpc_id             = &quot;vpc-00000000000000000&quot;
+15|     private_subnet_ids = []
+16|   }
+17| }
+18| 
+19| inputs = {
+20|   cluster_name    = &quot;telemetry-eks-prod&quot;
+21|   cluster_version = &quot;1.29&quot;
+22| 
+23|   vpc_id             = dependency.vpc.outputs.vpc_id
+24|   private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
+25| 
+26|   node_instance_type = &quot;t3.large&quot;
+27| 
+28|   common_tags = local.tags
+29| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_9">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_9" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Terragrunt <code>include</code> - pulls in parent configuration (like common locals, remote_state, provider generation).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Searches upward for the named file and includes it - this lets child stacks inherit env-level settings.</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Terragrunt <code>terraform</code> block - tells Terragrunt where the Terraform module source is.</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+<li>
+<p><strong>Line 9:</strong> Terragrunt dependency block - reads outputs from another stack so you can wire values without copy/paste.</p>
+</li>
+<li>
+<p><strong>Line 10:</strong> Backend configuration map.</p>
+</li>
+<li>
+<p><strong>Line 19:</strong> Inputs map passed to the Terraform module as variables.</p>
+</li>
+</ul>
+<h3 id="how-dependencies-work-here">How dependencies work here<a class="headerlink" href="#how-dependencies-work-here" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>A <code>dependency</code> block runs Terragrunt in the referenced folder, reads its Terraform outputs, and exposes them as <code>dependency.&lt;name&gt;.outputs.&lt;output_name&gt;</code>.</p>
+</li>
+<li>
+<p>That lets you wire, for example, <code>vpc_id</code> from the VPC stack into the EKS/RDS stacks without hardcoding.</p>
+</li>
+</ul>
+<hr />
+<h2 id="infraliveprodplatformrdsterragrunthcl"><code>infra/live/prod/platform/rds/terragrunt.hcl</code><a class="headerlink" href="#infraliveprodplatformrdsterragrunthcl" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_10">What this file is for<a class="headerlink" href="#what-this-file-is-for_10" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terragrunt configuration. Terragrunt wraps Terraform: it wires modules together, handles remote state, and injects providers.</li>
+</ul>
+<h3 id="file-contents-numbered_10">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_10" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| include &quot;env&quot; {
+ 2|   path = find_in_parent_folders(&quot;terragrunt.hcl&quot;)
+ 3| }
+ 4| 
+ 5| terraform {
+ 6|   source = &quot;../../../modules/rds&quot;
+ 7| }
+ 8| 
+ 9| dependency &quot;vpc&quot; {
+10|   config_path = &quot;../../network/vpc&quot;
+11| 
+12|   mock_outputs_allowed_terraform_commands = [&quot;validate&quot;, &quot;plan&quot;]
+13|   mock_outputs = {
+14|     vpc_id             = &quot;vpc-00000000000000000&quot;
+15|     private_subnet_ids = []
+16|     vpc_cidr_block     = &quot;10.0.0.0/16&quot;
+17|   }
+18| }
+19| 
+20| inputs = {
+21|   identifier = &quot;telemetry-db-prod&quot;
+22| 
+23|   db_name        = &quot;telemetry_prod&quot;
+24|   instance_class = &quot;db.t4g.medium&quot;
+25|   engine         = &quot;oracle-se2&quot;  # or &quot;postgres&quot; etc
+26|   # engine_version = &quot;...&quot;       # optionally override for non-Oracle engines
+27| 
+28|   username = &quot;telemetry&quot;
+29|   password = &quot;CHANGE_ME_STRONG_SECRET&quot;
+30| 
+31|   vpc_id         = dependency.vpc.outputs.vpc_id
+32|   vpc_cidr_block = dependency.vpc.outputs.vpc_cidr_block
+33|   subnet_ids     = dependency.vpc.outputs.private_subnet_ids
+34| 
+35|   common_tags = local.tags
+36| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_10">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_10" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Terragrunt <code>include</code> - pulls in parent configuration (like common locals, remote_state, provider generation).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Searches upward for the named file and includes it - this lets child stacks inherit env-level settings.</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Terragrunt <code>terraform</code> block - tells Terragrunt where the Terraform module source is.</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+<li>
+<p><strong>Line 9:</strong> Terragrunt dependency block - reads outputs from another stack so you can wire values without copy/paste.</p>
+</li>
+<li>
+<p><strong>Line 10:</strong> Backend configuration map.</p>
+</li>
+<li>
+<p><strong>Line 20:</strong> Inputs map passed to the Terraform module as variables.</p>
+</li>
+</ul>
+<h3 id="how-dependencies-work-here_1">How dependencies work here<a class="headerlink" href="#how-dependencies-work-here_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>A <code>dependency</code> block runs Terragrunt in the referenced folder, reads its Terraform outputs, and exposes them as <code>dependency.&lt;name&gt;.outputs.&lt;output_name&gt;</code>.</p>
+</li>
+<li>
+<p>That lets you wire, for example, <code>vpc_id</code> from the VPC stack into the EKS/RDS stacks without hardcoding.</p>
+</li>
+</ul>
+<hr />
+<h2 id="infraliveprodplatformtelemetry-platformterragrunthcl"><code>infra/live/prod/platform/telemetry-platform/terragrunt.hcl</code><a class="headerlink" href="#infraliveprodplatformtelemetry-platformterragrunthcl" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_11">What this file is for<a class="headerlink" href="#what-this-file-is-for_11" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terragrunt configuration. Terragrunt wraps Terraform: it wires modules together, handles remote state, and injects providers.</li>
+</ul>
+<h3 id="file-contents-numbered_11">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_11" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| include &quot;env&quot; {
+ 2|   path = find_in_parent_folders(&quot;terragrunt.hcl&quot;)
+ 3| }
+ 4| 
+ 5| terraform {
+ 6|   source = &quot;../../../../modules/telemetry-platform-eks&quot;
+ 7| }
+ 8| 
+ 9| dependency &quot;eks&quot; {
+10|   config_path = &quot;../eks&quot;
+11| 
+12|   mock_outputs_allowed_terraform_commands = [&quot;validate&quot;, &quot;plan&quot;]
+13|   mock_outputs = {
+14|     cluster_name     = &quot;mock&quot;
+15|     cluster_endpoint = &quot;https://example.com&quot;
+16|     cluster_ca_data  = &quot;&quot;
+17|   }
+18| }
+19| 
+20| dependency &quot;rds&quot; {
+21|   config_path = &quot;../rds&quot;
+22| 
+23|   mock_outputs_allowed_terraform_commands = [&quot;validate&quot;, &quot;plan&quot;]
+24|   mock_outputs = {
+25|     jdbc_url = &quot;jdbc:oracle:thin:@oracle-prod.example.com:1521/XEPDB1&quot;
+26|     db_user  = &quot;telemetry&quot;
+27|     db_pass  = &quot;telemetry_pw&quot;
+28|   }
+29| }
+30| 
+31| dependency &quot;ecr&quot; {
+32|   config_path = &quot;../ecr&quot;
+33| 
+34|   mock_outputs_allowed_terraform_commands = [&quot;validate&quot;, &quot;plan&quot;]
+35|   mock_outputs = {
+36|     repository_urls = {
+37|       &quot;telemetry/agent-ingest-svc&quot; = &quot;000000000000.dkr.ecr.us-east-1.amazonaws.com/telemetry/agent-ingest-svc&quot;
+38|       &quot;telemetry/device-state-svc&quot; = &quot;000000000000.dkr.ecr.us-east-1.amazonaws.com/telemetry/device-state-svc&quot;
+39|     }
+40|   }
+41| }
+42| 
+43| inputs = {
+44|   namespace = &quot;telemetry&quot;
+45| 
+46|   cluster_name     = dependency.eks.outputs.cluster_name
+47|   cluster_endpoint = dependency.eks.outputs.cluster_endpoint
+48|   cluster_ca_data  = dependency.eks.outputs.cluster_ca_data
+49| 
+50|   oracle_user     = dependency.rds.outputs.db_user
+51|   oracle_password = dependency.rds.outputs.db_pass
+52|   oracle_jdbc_url = dependency.rds.outputs.jdbc_url
+53| 
+54|   agent_ingest_image = &quot;${dependency.ecr.outputs.repository_urls[&quot;telemetry/agent-ingest-svc&quot;]}:release1&quot;
+55|   device_state_image = &quot;${dependency.ecr.outputs.repository_urls[&quot;telemetry/device-state-svc&quot;]}:release1&quot;
+56| 
+57|   agent_ingest_replicas = 2
+58| 
+59|   device_state_replicas       = 2
+60|   device_state_container_port = 8081
+61|   device_state_service_port   = 8080
+62| 
+63|   ingress_host = &quot;telemetry.internal&quot;
+64| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_11">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_11" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Terragrunt <code>include</code> - pulls in parent configuration (like common locals, remote_state, provider generation).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Searches upward for the named file and includes it - this lets child stacks inherit env-level settings.</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Terragrunt <code>terraform</code> block - tells Terragrunt where the Terraform module source is.</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+<li>
+<p><strong>Line 9:</strong> Terragrunt dependency block - reads outputs from another stack so you can wire values without copy/paste.</p>
+</li>
+<li>
+<p><strong>Line 10:</strong> Backend configuration map.</p>
+</li>
+<li>
+<p><strong>Line 20:</strong> Terragrunt dependency block - reads outputs from another stack so you can wire values without copy/paste.</p>
+</li>
+<li>
+<p><strong>Line 21:</strong> Backend configuration map.</p>
+</li>
+<li>
+<p><strong>Line 31:</strong> Terragrunt dependency block - reads outputs from another stack so you can wire values without copy/paste.</p>
+</li>
+<li>
+<p><strong>Line 32:</strong> Backend configuration map.</p>
+</li>
+<li>
+<p><strong>Line 43:</strong> Inputs map passed to the Terraform module as variables.</p>
+</li>
+</ul>
+<h3 id="how-dependencies-work-here_2">How dependencies work here<a class="headerlink" href="#how-dependencies-work-here_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>A <code>dependency</code> block runs Terragrunt in the referenced folder, reads its Terraform outputs, and exposes them as <code>dependency.&lt;name&gt;.outputs.&lt;output_name&gt;</code>.</p>
+</li>
+<li>
+<p>That lets you wire, for example, <code>vpc_id</code> from the VPC stack into the EKS/RDS stacks without hardcoding.</p>
+</li>
+</ul>
+<hr />
+<h2 id="infraliveprodterragrunthcl"><code>infra/live/prod/terragrunt.hcl</code><a class="headerlink" href="#infraliveprodterragrunthcl" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_12">What this file is for<a class="headerlink" href="#what-this-file-is-for_12" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terragrunt configuration. Terragrunt wraps Terraform: it wires modules together, handles remote state, and injects providers.</li>
+</ul>
+<h3 id="file-contents-numbered_12">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_12" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| locals {
+ 2|   environment = &quot;prod&quot;
+ 3| 
+ 4|   tags = {
+ 5|     Project     = local.project_name
+ 6|     Environment = local.environment
+ 7|     ManagedBy   = &quot;terragrunt&quot;
+ 8|   }
+ 9| }
+10| 
+11| remote_state {
+12|   backend = &quot;s3&quot;
+13|   config = {
+14|     bucket         = &quot;telemetry-terraform-state&quot;    # TODO: create this bucket
+15|     key            = &quot;${path_relative_to_include()}/terraform.tfstate&quot;
+16|     region         = &quot;us-east-1&quot;
+17|     encrypt        = true
+18|     dynamodb_table = &quot;telemetry-terraform-locks&quot;    # TODO: create this table
+19|   }
+20| }
+21| 
+22| generate &quot;providers&quot; {
+23|   path      = &quot;providers.generated.tf&quot;
+24|   if_exists = &quot;overwrite_terragrunt&quot;
+25|   contents  = &lt;&lt;EOC
+26| terraform {
+27|   required_version = &quot;&gt;= 1.8.0&quot;
+28| 
+29|   required_providers {
+30|     aws = {
+31|       source  = &quot;hashicorp/aws&quot;
+32|       version = &quot;~&gt; 5.0&quot;
+33|     }
+34|     helm = {
+35|       source  = &quot;hashicorp/helm&quot;
+36|       version = &quot;~&gt; 2.0&quot;
+37|     }
+38|     kubernetes = {
+39|       source  = &quot;hashicorp/kubernetes&quot;
+40|       version = &quot;~&gt; 2.0&quot;
+41|     }
+42|   }
+43| }
+44| 
+45| provider &quot;aws&quot; {
+46|   region = &quot;us-east-1&quot;
+47| }
+48| EOC
+49| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_12">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_12" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Starts a <code>locals</code> block - named values you can reuse in this file.</p>
+</li>
+<li>
+<p><strong>Line 11:</strong> Terragrunt remote_state - configures Terraform backend so state is stored remotely (S3) instead of locally.</p>
+</li>
+<li>
+<p><strong>Line 12:</strong> Selects Terraform backend type.</p>
+</li>
+<li>
+<p><strong>Line 13:</strong> Backend configuration map.</p>
+</li>
+<li>
+<p><strong>Line 15:</strong> Computes a unique state key per stack based on its folder path.</p>
+</li>
+<li>
+<p><strong>Line 22:</strong> Terragrunt generate - writes a file into the working dir before running Terraform (commonly providers).</p>
+</li>
+<li>
+<p><strong>Line 26:</strong> Terragrunt <code>terraform</code> block - tells Terragrunt where the Terraform module source is.</p>
+</li>
+<li>
+<p><strong>Line 31:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+<li>
+<p><strong>Line 35:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+<li>
+<p><strong>Line 39:</strong> Terraform module source path (relative here) that Terragrunt will run.</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframodulesecrmaintf"><code>infra/modules/ecr/main.tf</code><a class="headerlink" href="#inframodulesecrmaintf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_13">What this file is for<a class="headerlink" href="#what-this-file-is-for_13" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_13">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_13" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>1| resource &quot;aws_ecr_repository&quot; &quot;this&quot; {
+2|   for_each = toset(var.repositories)
+3| 
+4|   name = each.value
+5| 
+6|   tags = var.common_tags
+7| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_13">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_13" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Line 1:</strong> Declares a real infrastructure object to create/update (e.g., AWS VPC, EKS, IAM, etc.).</li>
+</ul>
+<hr />
+<h2 id="inframodulesecroutputstf"><code>infra/modules/ecr/outputs.tf</code><a class="headerlink" href="#inframodulesecroutputstf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_14">What this file is for<a class="headerlink" href="#what-this-file-is-for_14" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_14">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_14" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>1| output &quot;repository_urls&quot; {
+2|   value = {
+3|     for name, repo in aws_ecr_repository.this :
+4|     name =&gt; repo.repository_url
+5|   }
+6| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_14">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_14" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Line 1:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</li>
+</ul>
+<hr />
+<h2 id="inframodulesecrvariablestf"><code>infra/modules/ecr/variables.tf</code><a class="headerlink" href="#inframodulesecrvariablestf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_15">What this file is for<a class="headerlink" href="#what-this-file-is-for_15" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_15">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_15" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>1| variable &quot;repositories&quot; {
+2|   type = list(string)
+3| }
+4| 
+5| variable &quot;common_tags&quot; {
+6|   type = map(string)
+7| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_15">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_15" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframoduleseksmaintf"><code>infra/modules/eks/main.tf</code><a class="headerlink" href="#inframoduleseksmaintf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_16">What this file is for<a class="headerlink" href="#what-this-file-is-for_16" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_16">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_16" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| module &quot;eks&quot; {
+ 2|   source  = &quot;terraform-aws-modules/eks/aws&quot;
+ 3|   version = &quot;~&gt; 20.0&quot;
+ 4| 
+ 5|   cluster_name    = var.cluster_name
+ 6|   cluster_version = var.cluster_version
+ 7| 
+ 8|   vpc_id     = var.vpc_id
+ 9|   subnet_ids = var.private_subnet_ids
+10| 
+11|   eks_managed_node_groups = {
+12|     default = {
+13|       desired_size = 2
+14|       min_size     = 1
+15|       max_size     = 3
+16| 
+17|       instance_types = [var.node_instance_type]
+18|     }
+19|   }
+20| 
+21|   tags = var.common_tags
+22| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_16">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_16" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Line 1:</strong> Calls another Terraform module (a reusable chunk of infra).</li>
+</ul>
+<hr />
+<h2 id="inframoduleseksoutputstf"><code>infra/modules/eks/outputs.tf</code><a class="headerlink" href="#inframoduleseksoutputstf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_17">What this file is for<a class="headerlink" href="#what-this-file-is-for_17" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_17">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_17" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| output &quot;cluster_name&quot; {
+ 2|   value = module.eks.cluster_name
+ 3| }
+ 4| 
+ 5| output &quot;cluster_arn&quot; {
+ 6|   value = module.eks.cluster_arn
+ 7| }
+ 8| 
+ 9| output &quot;cluster_endpoint&quot; {
+10|   value = module.eks.cluster_endpoint
+11| }
+12| 
+13| output &quot;cluster_certificate_authority_data&quot; {
+14|   value = module.eks.cluster_certificate_authority_data
+15| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_17">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_17" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+<li>
+<p><strong>Line 9:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+<li>
+<p><strong>Line 13:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframoduleseksvariablestf"><code>infra/modules/eks/variables.tf</code><a class="headerlink" href="#inframoduleseksvariablestf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_18">What this file is for<a class="headerlink" href="#what-this-file-is-for_18" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_18">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_18" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| variable &quot;cluster_name&quot; {
+ 2|   type = string
+ 3| }
+ 4| 
+ 5| variable &quot;cluster_version&quot; {
+ 6|   type    = string
+ 7|   default = &quot;1.29&quot;
+ 8| }
+ 9| 
+10| variable &quot;vpc_id&quot; {
+11|   type = string
+12| }
+13| 
+14| variable &quot;private_subnet_ids&quot; {
+15|   type = list(string)
+16| }
+17| 
+18| variable &quot;node_instance_type&quot; {
+19|   type    = string
+20|   default = &quot;t3.large&quot;
+21| }
+22| 
+23| variable &quot;common_tags&quot; {
+24|   type = map(string)
+25| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_18">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_18" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 10:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 14:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 18:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 23:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframodulesingress-nginx-localmaintf"><code>infra/modules/ingress-nginx-local/main.tf</code><a class="headerlink" href="#inframodulesingress-nginx-localmaintf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_19">What this file is for<a class="headerlink" href="#what-this-file-is-for_19" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_19">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_19" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| resource &quot;null_resource&quot; &quot;ingress_nginx&quot; {
+ 2|   provisioner &quot;local-exec&quot; {
+ 3|     command = &lt;&lt;EOT
+ 4| set -euo pipefail
+ 5| 
+ 6| # Install ingress-nginx for kind
+ 7| kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/kind/deploy.yaml
+ 8| 
+ 9| # Wait for controller to be ready
+10| kubectl wait --namespace ingress-nginx \
+11|   --for=condition=ready pod \
+12|   --selector=app.kubernetes.io/component=controller \
+13|   --timeout=180s
+14| EOT
+15|   }
+16| }
+17| 
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_19">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_19" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Line 1:</strong> Declares a real infrastructure object to create/update (e.g., AWS VPC, EKS, IAM, etc.).</li>
+</ul>
+<hr />
+<h2 id="inframoduleskind-cluster-localmaintf"><code>infra/modules/kind-cluster-local/main.tf</code><a class="headerlink" href="#inframoduleskind-cluster-localmaintf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_20">What this file is for<a class="headerlink" href="#what-this-file-is-for_20" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_20">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_20" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| resource &quot;null_resource&quot; &quot;kind_cluster&quot; {
+ 2|   provisioner &quot;local-exec&quot; {
+ 3|     command = &lt;&lt;EOT
+ 4| set -euo pipefail
+ 5| 
+ 6| # Write kind config with ingress label + host port mappings
+ 7| cat &gt; ${var.kind_config_path} &lt;&lt;EOF
+ 8| kind: Cluster
+ 9| apiVersion: kind.x-k8s.io/v1alpha4
+10| name: ${var.cluster_name}
+11| nodes:
+12|   - role: control-plane
+13|     labels:
+14|       ingress-ready: &quot;true&quot;
+15|     extraPortMappings:
+16|       - containerPort: 80
+17|         hostPort: 80
+18|         protocol: TCP
+19|       - containerPort: 443
+20|         hostPort: 443
+21|         protocol: TCP
+22| EOF
+23| 
+24| # Recreate cluster
+25| kind delete cluster --name ${var.cluster_name} || true
+26| kind create cluster --name ${var.cluster_name} --config ${var.kind_config_path}
+27| EOT
+28|   }
+29| }
+30| 
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_20">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_20" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Line 1:</strong> Declares a real infrastructure object to create/update (e.g., AWS VPC, EKS, IAM, etc.).</li>
+</ul>
+<hr />
+<h2 id="inframoduleskind-cluster-localvariablestf"><code>infra/modules/kind-cluster-local/variables.tf</code><a class="headerlink" href="#inframoduleskind-cluster-localvariablestf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_21">What this file is for<a class="headerlink" href="#what-this-file-is-for_21" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_21">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_21" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| variable &quot;cluster_name&quot; {
+ 2|   type    = string
+ 3|   default = &quot;telemetry&quot;
+ 4| }
+ 5| 
+ 6| variable &quot;kind_config_path&quot; {
+ 7|   type    = string
+ 8|   default = &quot;kind-config.yaml&quot;
+ 9| }
+10| 
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_21">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_21" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframodulesrdsmaintf"><code>infra/modules/rds/main.tf</code><a class="headerlink" href="#inframodulesrdsmaintf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_22">What this file is for<a class="headerlink" href="#what-this-file-is-for_22" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_22">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_22" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| resource &quot;aws_security_group&quot; &quot;rds&quot; {
+ 2|   name        = &quot;${var.identifier}-sg&quot;
+ 3|   description = &quot;Security group for ${var.identifier} RDS instance&quot;
+ 4|   vpc_id      = var.vpc_id
+ 5| 
+ 6|   # For demo: allow DB access from within the VPC
+ 7|   ingress {
+ 8|     from_port   = 1521
+ 9|     to_port     = 1521
+10|     protocol    = &quot;tcp&quot;
+11|     cidr_blocks = [var.vpc_cidr_block]
+12|   }
+13| 
+14|   egress {
+15|     from_port   = 0
+16|     to_port     = 0
+17|     protocol    = &quot;-1&quot;
+18|     cidr_blocks = [&quot;0.0.0.0/0&quot;]
+19|   }
+20| 
+21|   tags = var.common_tags
+22| }
+23| 
+24| resource &quot;aws_db_subnet_group&quot; &quot;this&quot; {
+25|   name       = &quot;${var.identifier}-subnets&quot;
+26|   subnet_ids = var.subnet_ids
+27| 
+28|   tags = var.common_tags
+29| }
+30| 
+31| resource &quot;aws_db_instance&quot; &quot;this&quot; {
+32|   identifier        = var.identifier
+33|   allocated_storage = var.allocated_storage
+34| 
+35|   engine         = var.engine
+36|   engine_version = var.engine_version
+37|   instance_class = var.instance_class
+38| 
+39|   db_name  = var.db_name
+40|   username = var.username
+41|   password = var.password
+42| 
+43|   db_subnet_group_name   = aws_db_subnet_group.this.name
+44|   vpc_security_group_ids = [aws_security_group.rds.id]
+45| 
+46|   publicly_accessible = false
+47|   skip_final_snapshot = true
+48| 
+49|   tags = var.common_tags
+50| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_22">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_22" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Declares a real infrastructure object to create/update (e.g., AWS VPC, EKS, IAM, etc.).</p>
+</li>
+<li>
+<p><strong>Line 24:</strong> Declares a real infrastructure object to create/update (e.g., AWS VPC, EKS, IAM, etc.).</p>
+</li>
+<li>
+<p><strong>Line 31:</strong> Declares a real infrastructure object to create/update (e.g., AWS VPC, EKS, IAM, etc.).</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframodulesrdsoutputstf"><code>infra/modules/rds/outputs.tf</code><a class="headerlink" href="#inframodulesrdsoutputstf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_23">What this file is for<a class="headerlink" href="#what-this-file-is-for_23" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_23">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_23" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| output &quot;endpoint&quot; {
+ 2|   value = aws_db_instance.this.address
+ 3| }
+ 4| 
+ 5| output &quot;port&quot; {
+ 6|   value = aws_db_instance.this.port
+ 7| }
+ 8| 
+ 9| output &quot;db_name&quot; {
+10|   value = aws_db_instance.this.db_name
+11| }
+12| 
+13| output &quot;username&quot; {
+14|   value = aws_db_instance.this.username
+15| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_23">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_23" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+<li>
+<p><strong>Line 9:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+<li>
+<p><strong>Line 13:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframodulesrdsvariablestf"><code>infra/modules/rds/variables.tf</code><a class="headerlink" href="#inframodulesrdsvariablestf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_24">What this file is for<a class="headerlink" href="#what-this-file-is-for_24" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_24">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_24" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| variable &quot;identifier&quot; {
+ 2|   type    = string
+ 3|   default = &quot;telemetry-db&quot;
+ 4| }
+ 5| 
+ 6| variable &quot;db_name&quot; {
+ 7|   type = string
+ 8| }
+ 9| 
+10| variable &quot;instance_class&quot; {
+11|   type = string
+12| }
+13| 
+14| variable &quot;engine&quot; {
+15|   type = string
+16| }
+17| 
+18| variable &quot;engine_version&quot; {
+19|   type    = string
+20|   default = &quot;19.0.0.0.ru-2024-01.rur-2024-01.r1&quot; # example for Oracle; change if using Postgres
+21| }
+22| 
+23| variable &quot;allocated_storage&quot; {
+24|   type    = number
+25|   default = 20
+26| }
+27| 
+28| variable &quot;username&quot; {
+29|   type = string
+30| }
+31| 
+32| variable &quot;password&quot; {
+33|   type      = string
+34|   sensitive = true
+35| }
+36| 
+37| variable &quot;vpc_id&quot; {
+38|   type = string
+39| }
+40| 
+41| variable &quot;vpc_cidr_block&quot; {
+42|   type = string
+43| }
+44| 
+45| variable &quot;subnet_ids&quot; {
+46|   type = list(string)
+47| }
+48| 
+49| variable &quot;common_tags&quot; {
+50|   type = map(string)
+51| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_24">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_24" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 10:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 14:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 18:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 23:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 28:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 32:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 34:</strong> Marks a value as sensitive so Terraform hides it in CLI output (still stored in state).</p>
+</li>
+<li>
+<p><strong>Line 37:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 41:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 45:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 49:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframodulestelemetry-platform-eksmaintf"><code>infra/modules/telemetry-platform-eks/main.tf</code><a class="headerlink" href="#inframodulestelemetry-platform-eksmaintf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_25">What this file is for<a class="headerlink" href="#what-this-file-is-for_25" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_25">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_25" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| # TODO: configure auth (IRSA / aws-iam-authenticator / exec)
+ 2| provider &quot;kubernetes&quot; {
+ 3|   host                   = var.cluster_endpoint
+ 4|   cluster_ca_certificate = base64decode(var.cluster_ca_data)
+ 5|   token                  = &quot;&quot; # TODO
+ 6| }
+ 7| 
+ 8| provider &quot;helm&quot; {
+ 9|   kubernetes {
+10|     host                   = var.cluster_endpoint
+11|     cluster_ca_certificate = base64decode(var.cluster_ca_data)
+12|     token                  = &quot;&quot; # TODO
+13|   }
+14| }
+15| 
+16| resource &quot;helm_release&quot; &quot;telemetry_platform&quot; {
+17|   name             = &quot;telemetry-platform&quot;
+18|   namespace        = var.namespace
+19|   create_namespace = true
+20| 
+21|   chart = &quot;${path.module}/../../helm/telemetry-platform&quot;
+22| 
+23|   values = [
+24|     yamlencode({
+25|       global = {
+26|         namespace = var.namespace
+27|         oracle = {
+28|           password = var.oracle_password
+29|           user     = var.oracle_user
+30|           jdbc_url = var.oracle_jdbc_url
+31|         }
+32|       }
+33|       &quot;agent-ingest-svc&quot; = {
+34|         image    = var.agent_ingest_image
+35|         replicas = var.agent_ingest_replicas
+36|       }
+37|       &quot;device-state-svc&quot; = {
+38|         image         = var.device_state_image
+39|         replicas      = var.device_state_replicas
+40|         containerPort = var.device_state_container_port
+41|         servicePort   = var.device_state_service_port
+42|       }
+43|       ingress = {
+44|         host = var.ingress_host
+45|       }
+46|     })
+47|   ]
+48| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_25">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_25" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 2:</strong> Configures a provider instance (how Terraform authenticates/talks to that API).</p>
+</li>
+<li>
+<p><strong>Line 8:</strong> Configures a provider instance (how Terraform authenticates/talks to that API).</p>
+</li>
+<li>
+<p><strong>Line 16:</strong> Declares a real infrastructure object to create/update (e.g., AWS VPC, EKS, IAM, etc.).</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframodulestelemetry-platform-eksvariablestf"><code>infra/modules/telemetry-platform-eks/variables.tf</code><a class="headerlink" href="#inframodulestelemetry-platform-eksvariablestf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_26">What this file is for<a class="headerlink" href="#what-this-file-is-for_26" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_26">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_26" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| variable &quot;namespace&quot; {
+ 2|   type    = string
+ 3|   default = &quot;telemetry&quot;
+ 4| }
+ 5| 
+ 6| variable &quot;cluster_name&quot; {
+ 7|   type = string
+ 8| }
+ 9| 
+10| variable &quot;cluster_endpoint&quot; {
+11|   type = string
+12| }
+13| 
+14| variable &quot;cluster_ca_data&quot; {
+15|   type = string
+16| }
+17| 
+18| variable &quot;oracle_user&quot; {
+19|   type = string
+20| }
+21| 
+22| variable &quot;oracle_password&quot; {
+23|   type = string
+24| }
+25| 
+26| variable &quot;oracle_jdbc_url&quot; {
+27|   type = string
+28| }
+29| 
+30| variable &quot;agent_ingest_image&quot; {
+31|   type = string
+32| }
+33| 
+34| variable &quot;agent_ingest_replicas&quot; {
+35|   type    = number
+36|   default = 2
+37| }
+38| 
+39| variable &quot;device_state_image&quot; {
+40|   type = string
+41| }
+42| 
+43| variable &quot;device_state_replicas&quot; {
+44|   type    = number
+45|   default = 1
+46| }
+47| 
+48| variable &quot;device_state_container_port&quot; {
+49|   type    = number
+50|   default = 8081
+51| }
+52| 
+53| variable &quot;device_state_service_port&quot; {
+54|   type    = number
+55|   default = 8080
+56| }
+57| 
+58| variable &quot;ingress_host&quot; {
+59|   type = string
+60| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_26">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_26" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 10:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 14:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 18:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 22:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 26:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 30:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 34:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 39:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 43:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 48:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 53:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 58:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframodulestelemetry-platform-localmaintf"><code>infra/modules/telemetry-platform-local/main.tf</code><a class="headerlink" href="#inframodulestelemetry-platform-localmaintf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_27">What this file is for<a class="headerlink" href="#what-this-file-is-for_27" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_27">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_27" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| resource &quot;helm_release&quot; &quot;telemetry_platform&quot; {
+ 2|   name             = &quot;telemetry-platform&quot;
+ 3|   namespace        = var.namespace
+ 4|   create_namespace = true
+ 5| 
+ 6|   chart = var.chart_path
+ 7| 
+ 8|   values = [
+ 9|     yamlencode({
+10|       global = {
+11|         namespace = var.namespace
+12|         oracle = {
+13|           password = var.oracle_password
+14|           user     = var.oracle_user
+15|           jdbc_url = var.oracle_jdbc_url
+16|         }
+17|       }
+18|       &quot;agent-ingest-svc&quot; = {
+19|         image    = var.agent_ingest_image
+20|         replicas = var.agent_ingest_replicas
+21|       }
+22|       &quot;device-state-svc&quot; = {
+23|         image         = var.device_state_image
+24|         replicas      = var.device_state_replicas
+25|         containerPort = var.device_state_container_port
+26|         servicePort   = var.device_state_service_port
+27|       }
+28|       ingress = {
+29|         host = var.ingress_host
+30|       }
+31|     })
+32|   ]
+33| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_27">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_27" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Line 1:</strong> Declares a real infrastructure object to create/update (e.g., AWS VPC, EKS, IAM, etc.).</li>
+</ul>
+<hr />
+<h2 id="inframodulestelemetry-platform-localvariablestf"><code>infra/modules/telemetry-platform-local/variables.tf</code><a class="headerlink" href="#inframodulestelemetry-platform-localvariablestf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_28">What this file is for<a class="headerlink" href="#what-this-file-is-for_28" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_28">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_28" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| variable &quot;chart_path&quot; {
+ 2|   type = string
+ 3| }
+ 4| 
+ 5| variable &quot;namespace&quot; {
+ 6|   type    = string
+ 7|   default = &quot;telemetry&quot;
+ 8| }
+ 9| 
+10| variable &quot;oracle_user&quot; {
+11|   type = string
+12| }
+13| 
+14| variable &quot;oracle_password&quot; {
+15|   type = string
+16| }
+17| 
+18| variable &quot;oracle_jdbc_url&quot; {
+19|   type = string
+20| }
+21| 
+22| variable &quot;agent_ingest_image&quot; {
+23|   type = string
+24| }
+25| 
+26| variable &quot;agent_ingest_replicas&quot; {
+27|   type    = number
+28|   default = 2
+29| }
+30| 
+31| variable &quot;device_state_image&quot; {
+32|   type = string
+33| }
+34| 
+35| variable &quot;device_state_replicas&quot; {
+36|   type    = number
+37|   default = 1
+38| }
+39| 
+40| variable &quot;device_state_container_port&quot; {
+41|   type    = number
+42|   default = 8081
+43| }
+44| 
+45| variable &quot;device_state_service_port&quot; {
+46|   type    = number
+47|   default = 8080
+48| }
+49| 
+50| variable &quot;ingress_host&quot; {
+51|   type    = string
+52|   default = &quot;telemetry.internal&quot;
+53| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_28">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_28" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 10:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 14:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 18:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 22:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 26:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 31:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 35:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 40:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 45:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 50:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframodulesvpcmaintf"><code>infra/modules/vpc/main.tf</code><a class="headerlink" href="#inframodulesvpcmaintf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_29">What this file is for<a class="headerlink" href="#what-this-file-is-for_29" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_29">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_29" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| module &quot;vpc&quot; {
+ 2|   source  = &quot;terraform-aws-modules/vpc/aws&quot;
+ 3|   version = &quot;~&gt; 5.0&quot;
+ 4| 
+ 5|   name = var.name
+ 6|   cidr = var.cidr_block
+ 7| 
+ 8|   azs             = var.azs
+ 9|   private_subnets = var.private_subnets
+10|   public_subnets  = var.public_subnets
+11| 
+12|   enable_nat_gateway   = true
+13|   single_nat_gateway   = true
+14|   enable_dns_hostnames = true
+15|   enable_dns_support   = true
+16| 
+17|   tags = var.common_tags
+18| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_29">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_29" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Line 1:</strong> Calls another Terraform module (a reusable chunk of infra).</li>
+</ul>
+<hr />
+<h2 id="inframodulesvpcoutputstf"><code>infra/modules/vpc/outputs.tf</code><a class="headerlink" href="#inframodulesvpcoutputstf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_30">What this file is for<a class="headerlink" href="#what-this-file-is-for_30" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_30">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_30" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| output &quot;vpc_id&quot; {
+ 2|   value = module.vpc.vpc_id
+ 3| }
+ 4| 
+ 5| output &quot;private_subnet_ids&quot; {
+ 6|   value = module.vpc.private_subnets
+ 7| }
+ 8| 
+ 9| output &quot;public_subnet_ids&quot; {
+10|   value = module.vpc.public_subnets
+11| }
+12| 
+13| output &quot;vpc_cidr_block&quot; {
+14|   value = module.vpc.vpc_cidr_block
+15| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_30">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_30" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+<li>
+<p><strong>Line 9:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+<li>
+<p><strong>Line 13:</strong> Defines an output value this module exports to callers (Terragrunt dependencies read these).</p>
+</li>
+</ul>
+<hr />
+<h2 id="inframodulesvpcvariablestf"><code>infra/modules/vpc/variables.tf</code><a class="headerlink" href="#inframodulesvpcvariablestf" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_31">What this file is for<a class="headerlink" href="#what-this-file-is-for_31" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Terraform module code (resources, variables, outputs).</li>
+</ul>
+<h3 id="file-contents-numbered_31">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_31" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| variable &quot;name&quot; {
+ 2|   type = string
+ 3| }
+ 4| 
+ 5| variable &quot;cidr_block&quot; {
+ 6|   type = string
+ 7| }
+ 8| 
+ 9| variable &quot;azs&quot; {
+10|   type = list(string)
+11| }
+12| 
+13| variable &quot;private_subnets&quot; {
+14|   type = list(string)
+15| }
+16| 
+17| variable &quot;public_subnets&quot; {
+18|   type = list(string)
+19| }
+20| 
+21| variable &quot;common_tags&quot; {
+22|   type = map(string)
+23| }
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_31">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_31" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 9:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 13:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 17:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+<li>
+<p><strong>Line 21:</strong> Defines an input variable (must be provided by caller or has a default).</p>
+</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartyaml"><code>helm/telemetry-platform/Chart.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_32">What this file is for<a class="headerlink" href="#what-this-file-is-for_32" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Helm chart metadata.</li>
+</ul>
+<h3 id="file-contents-numbered_32">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_32" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| apiVersion: v2
+ 2| name: telemetry-platform
+ 3| description: Telemetry Platform full stack
+ 4| version: 0.1.0
+ 5| dependencies:
+ 6|   - name: oracle
+ 7|     version: 0.1.0
+ 8|     repository: file://charts/oracle
+ 9|   - name: agent-ingest-svc
+10|     version: 0.1.0
+11|     repository: file://charts/agent-ingest-svc
+12|   - name: device-state-svc
+13|     version: 0.1.0
+14|     repository: file://charts/device-state-svc
+15|   - name: ingress
+16|     version: 0.1.0
+17|     repository: file://charts/ingress
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_32">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_32" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Helm chart API version (v2 is modern Helm 3).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Chart name.</p>
+</li>
+<li>
+<p><strong>Line 4:</strong> Chart package version (changes when chart structure changes).</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Lists sub-charts this chart depends on.</p>
+</li>
+<li>
+<p><strong>Line 7:</strong> Chart package version (changes when chart structure changes).</p>
+</li>
+<li>
+<p><strong>Line 10:</strong> Chart package version (changes when chart structure changes).</p>
+</li>
+<li>
+<p><strong>Line 13:</strong> Chart package version (changes when chart structure changes).</p>
+</li>
+<li>
+<p><strong>Line 16:</strong> Chart package version (changes when chart structure changes).</p>
+</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsagent-ingest-svcchartyaml"><code>helm/telemetry-platform/charts/agent-ingest-svc/Chart.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartsagent-ingest-svcchartyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_33">What this file is for<a class="headerlink" href="#what-this-file-is-for_33" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Helm chart metadata.</li>
+</ul>
+<h3 id="file-contents-numbered_33">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_33" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>1| apiVersion: v2
+2| name: agent-ingest-svc
+3| description: Agent ingest microservice for telemetry platform
+4| type: application
+5| version: 0.1.0
+6| appVersion: &quot;release1&quot;
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_33">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_33" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Helm chart API version (v2 is modern Helm 3).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Chart name.</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Chart package version (changes when chart structure changes).</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Application version (the app the chart deploys).</p>
+</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsagent-ingest-svctemplatesdeploymentyaml"><code>helm/telemetry-platform/charts/agent-ingest-svc/templates/deployment.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartsagent-ingest-svctemplatesdeploymentyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_34">What this file is for<a class="headerlink" href="#what-this-file-is-for_34" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Kubernetes manifest template rendered by Helm.</li>
+</ul>
+<h3 id="file-contents-numbered_34">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_34" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| apiVersion: apps/v1
+ 2| kind: Deployment
+ 3| metadata:
+ 4|   name: agent-ingest-svc
+ 5|   namespace: {{ .Values.global.namespace }}
+ 6| spec:
+ 7|   replicas: {{ .Values.replicas }}
+ 8|   selector:
+ 9|     matchLabels:
+10|       app: agent-ingest-svc
+11|   template:
+12|     metadata:
+13|       labels:
+14|         app: agent-ingest-svc
+15|     spec:
+16|       containers:
+17|         - name: agent-ingest-svc
+18|           image: {{ .Values.image }}
+19|           imagePullPolicy: IfNotPresent
+20|           envFrom:
+21|             - secretRef:
+22|                 name: oracle-credentials
+23|           ports:
+24|             - containerPort: 8080
+25|           readinessProbe:
+26|             httpGet:
+27|               path: /actuator/health
+28|               port: 8080
+29|             initialDelaySeconds: 5
+30|             periodSeconds: 5
+31| ---
+32| apiVersion: v1
+33| kind: Service
+34| metadata:
+35|   name: agent-ingest-svc
+36|   namespace: {{ .Values.global.namespace }}
+37|   annotations:
+38|     prometheus.io/scrape: &quot;true&quot;
+39|     prometheus.io/path: &quot;/actuator/prometheus&quot;
+40|     prometheus.io/port: &quot;8080&quot;
+41| spec:
+42|   selector:
+43|     app: agent-ingest-svc
+44|   ports:
+45|     - port: 8080
+46|       targetPort: 8080
+47|       name: http
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_34">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_34" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Kubernetes API group/version for this object.</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> The type of Kubernetes object (Deployment, Service, Ingress, etc.).</p>
+</li>
+<li>
+<p><strong>Line 3:</strong> Object metadata (name, namespace, labels, annotations).</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 12:</strong> Object metadata (name, namespace, labels, annotations).</p>
+</li>
+<li>
+<p><strong>Line 15:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 16:</strong> List of containers that will run in the Pod.</p>
+</li>
+<li>
+<p><strong>Line 18:</strong> Container image reference to pull/run (repo/name:tag).</p>
+</li>
+<li>
+<p><strong>Line 23:</strong> Ports exposed by the container or service.</p>
+</li>
+<li>
+<p><strong>Line 32:</strong> Kubernetes API group/version for this object.</p>
+</li>
+<li>
+<p><strong>Line 33:</strong> The type of Kubernetes object (Deployment, Service, Ingress, etc.).</p>
+</li>
+<li>
+<p><strong>Line 34:</strong> Object metadata (name, namespace, labels, annotations).</p>
+</li>
+<li>
+<p><strong>Line 41:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 44:</strong> Ports exposed by the container or service.</p>
+</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsagent-ingest-svcvaluesyaml"><code>helm/telemetry-platform/charts/agent-ingest-svc/values.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartsagent-ingest-svcvaluesyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_35">What this file is for<a class="headerlink" href="#what-this-file-is-for_35" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Helm default values (your knobs).</li>
+</ul>
+<h3 id="file-contents-numbered_35">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_35" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>1| # Default values for agent-ingest-svc
+2| image: agent-ingest-svc:release1
+3| replicas: 2
+4| resources: {}
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_35">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_35" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Line 4:</strong> Default CPU/memory requests/limits for the chart.</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsdevice-state-svcchartyaml"><code>helm/telemetry-platform/charts/device-state-svc/Chart.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartsdevice-state-svcchartyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_36">What this file is for<a class="headerlink" href="#what-this-file-is-for_36" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Helm chart metadata.</li>
+</ul>
+<h3 id="file-contents-numbered_36">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_36" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>1| apiVersion: v2
+2| name: device-state-svc
+3| description: Device status/read API
+4| type: application
+5| version: 0.1.0
+6| appVersion: &quot;release1&quot;
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_36">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_36" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Helm chart API version (v2 is modern Helm 3).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Chart name.</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Chart package version (changes when chart structure changes).</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Application version (the app the chart deploys).</p>
+</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsdevice-state-svctemplatesdeploymentyaml"><code>helm/telemetry-platform/charts/device-state-svc/templates/deployment.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartsdevice-state-svctemplatesdeploymentyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_37">What this file is for<a class="headerlink" href="#what-this-file-is-for_37" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Kubernetes manifest template rendered by Helm.</li>
+</ul>
+<h3 id="file-contents-numbered_37">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_37" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| apiVersion: apps/v1
+ 2| kind: Deployment
+ 3| metadata:
+ 4|   name: device-state-svc
+ 5|   namespace: {{ .Values.global.namespace }}
+ 6| spec:
+ 7|   replicas: {{ .Values.replicas }}
+ 8|   selector:
+ 9|     matchLabels:
+10|       app: device-state-svc
+11|   template:
+12|     metadata:
+13|       labels:
+14|         app: device-state-svc
+15|     spec:
+16|       containers:
+17|         - name: device-state-svc
+18|           image: {{ .Values.image }}
+19|           imagePullPolicy: IfNotPresent
+20|           envFrom:
+21|             - secretRef:
+22|                 name: oracle-credentials
+23|           ports:
+24|             - containerPort: {{ .Values.containerPort }}
+25|           readinessProbe:
+26|             httpGet:
+27|               path: /actuator/health
+28|               port: {{ .Values.containerPort }}
+29|             initialDelaySeconds: 5
+30|             periodSeconds: 5
+31| ---
+32| apiVersion: v1
+33| kind: Service
+34| metadata:
+35|   name: device-state-svc
+36|   namespace: {{ .Values.global.namespace }}
+37|   annotations:
+38|     prometheus.io/scrape: &quot;true&quot;
+39|     prometheus.io/path: &quot;/actuator/prometheus&quot;
+40|     prometheus.io/port: &quot;8080&quot;
+41| spec:
+42|   selector:
+43|     app: device-state-svc
+44|   ports:
+45|     - port: {{ .Values.servicePort }}
+46|       targetPort: {{ .Values.containerPort }}
+47|       name: http
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_37">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_37" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Kubernetes API group/version for this object.</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> The type of Kubernetes object (Deployment, Service, Ingress, etc.).</p>
+</li>
+<li>
+<p><strong>Line 3:</strong> Object metadata (name, namespace, labels, annotations).</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 12:</strong> Object metadata (name, namespace, labels, annotations).</p>
+</li>
+<li>
+<p><strong>Line 15:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 16:</strong> List of containers that will run in the Pod.</p>
+</li>
+<li>
+<p><strong>Line 18:</strong> Container image reference to pull/run (repo/name:tag).</p>
+</li>
+<li>
+<p><strong>Line 23:</strong> Ports exposed by the container or service.</p>
+</li>
+<li>
+<p><strong>Line 32:</strong> Kubernetes API group/version for this object.</p>
+</li>
+<li>
+<p><strong>Line 33:</strong> The type of Kubernetes object (Deployment, Service, Ingress, etc.).</p>
+</li>
+<li>
+<p><strong>Line 34:</strong> Object metadata (name, namespace, labels, annotations).</p>
+</li>
+<li>
+<p><strong>Line 41:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 44:</strong> Ports exposed by the container or service.</p>
+</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsdevice-state-svcvaluesyaml"><code>helm/telemetry-platform/charts/device-state-svc/values.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartsdevice-state-svcvaluesyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_38">What this file is for<a class="headerlink" href="#what-this-file-is-for_38" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Helm default values (your knobs).</li>
+</ul>
+<h3 id="file-contents-numbered_38">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_38" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>1| image: device-state-svc:release1
+2| replicas: 1
+3| containerPort: 8081
+4| servicePort: 8080
+5| resources: {}
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_38">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_38" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Line 5:</strong> Default CPU/memory requests/limits for the chart.</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsingresschartyaml"><code>helm/telemetry-platform/charts/ingress/Chart.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartsingresschartyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_39">What this file is for<a class="headerlink" href="#what-this-file-is-for_39" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Helm chart metadata.</li>
+</ul>
+<h3 id="file-contents-numbered_39">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_39" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>1| apiVersion: v2
+2| name: ingress
+3| description: A Helm chart for Kubernetes
+4| type: application
+5| version: 0.1.0
+6| appVersion: &quot;release1&quot;
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_39">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_39" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Helm chart API version (v2 is modern Helm 3).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Chart name.</p>
+</li>
+<li>
+<p><strong>Line 5:</strong> Chart package version (changes when chart structure changes).</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Application version (the app the chart deploys).</p>
+</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsingresstemplatesingressyaml"><code>helm/telemetry-platform/charts/ingress/templates/ingress.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartsingresstemplatesingressyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_40">What this file is for<a class="headerlink" href="#what-this-file-is-for_40" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Kubernetes manifest template rendered by Helm.</li>
+</ul>
+<h3 id="file-contents-numbered_40">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_40" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| apiVersion: networking.k8s.io/v1
+ 2| kind: Ingress
+ 3| metadata:
+ 4|   name: telemetry-gateway
+ 5|   namespace: {{ .Release.Namespace }}
+ 6| spec:
+ 7|   ingressClassName: nginx
+ 8|   rules:
+ 9|     - host: {{ .Values.host | default &quot;telemetry.internal&quot; }}
+10|       http:
+11|         paths:
+12|           - path: /telemetry
+13|             pathType: Prefix
+14|             backend:
+15|               service:
+16|                 name: agent-ingest-svc
+17|                 port:
+18|                   number: 8080
+19|           - path: /devices
+20|             pathType: Prefix
+21|             backend:
+22|               service:
+23|                 name: device-state-svc
+24|                 port:
+25|                   number: 8080
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_40">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_40" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Kubernetes API group/version for this object.</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> The type of Kubernetes object (Deployment, Service, Ingress, etc.).</p>
+</li>
+<li>
+<p><strong>Line 3:</strong> Object metadata (name, namespace, labels, annotations).</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 7:</strong> Which Ingress controller should handle this Ingress.</p>
+</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsingressvaluesyaml"><code>helm/telemetry-platform/charts/ingress/values.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartsingressvaluesyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_41">What this file is for<a class="headerlink" href="#what-this-file-is-for_41" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Helm default values (your knobs).</li>
+</ul>
+<h3 id="file-contents-numbered_41">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_41" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>1| host: telemetry.internal
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_41">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_41" title="Permanent link">&para;</a></h3>
+<ul>
+<li>(No special constructs detected - this is mostly data/values.)</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsoraclechartyaml"><code>helm/telemetry-platform/charts/oracle/Chart.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartsoraclechartyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_42">What this file is for<a class="headerlink" href="#what-this-file-is-for_42" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Helm chart metadata.</li>
+</ul>
+<h3 id="file-contents-numbered_42">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_42" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| apiVersion: v2
+ 2| name: oracle
+ 3| description: A Helm chart for Kubernetes
+ 4| 
+ 5| # A chart can be either an &#39;application&#39; or a &#39;library&#39; chart.
+ 6| #
+ 7| # Application charts are a collection of templates that can be packaged into versioned archives
+ 8| # to be deployed.
+ 9| #
+10| # Library charts provide useful utilities or functions for the chart developer. They&#39;re included as
+11| # a dependency of application charts to inject those utilities and functions into the rendering
+12| # pipeline. Library charts do not define any templates and therefore cannot be deployed.
+13| type: application
+14| 
+15| # This is the chart version. This version number should be incremented each time you make changes
+16| # to the chart and its templates, including the app version.
+17| # Versions are expected to follow Semantic Versioning (https://semver.org/)
+18| version: 0.1.0
+19| 
+20| # This is the version number of the application being deployed. This version number should be
+21| # incremented each time you make changes to the application. Versions are not expected to
+22| # follow Semantic Versioning. They should reflect the version the application is using.
+23| # It is recommended to use it with quotes.
+24| appVersion: &quot;1.16.0&quot;
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_42">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_42" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 1:</strong> Helm chart API version (v2 is modern Helm 3).</p>
+</li>
+<li>
+<p><strong>Line 2:</strong> Chart name.</p>
+</li>
+<li>
+<p><strong>Line 18:</strong> Chart package version (changes when chart structure changes).</p>
+</li>
+<li>
+<p><strong>Line 24:</strong> Application version (the app the chart deploys).</p>
+</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsoracletemplatesoracleyml"><code>helm/telemetry-platform/charts/oracle/templates/oracle.yml</code><a class="headerlink" href="#helmtelemetry-platformchartsoracletemplatesoracleyml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_43">What this file is for<a class="headerlink" href="#what-this-file-is-for_43" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Kubernetes manifest template rendered by Helm.</li>
+</ul>
+<h3 id="file-contents-numbered_43">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_43" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>  1| {{- $fullName := &quot;oracle-db&quot; -}}
+  2| 
+  3| # ---------------------------------------------------------------------------
+  4| # Secret for credentials
+  5| # ---------------------------------------------------------------------------
+  6| apiVersion: v1
+  7| kind: Secret
+  8| metadata:
+  9|   name: oracle-credentials
+ 10|   namespace: {{ .Values.global.namespace }}
+ 11| type: Opaque
+ 12| stringData:
+ 13|   ORACLE_PASSWORD: {{ default .Values.env.password .Values.global.oracle.password }}
+ 14|   ORACLE_USER: {{ default .Values.env.user .Values.global.oracle.user }}
+ 15|   ORACLE_JDBC_URL: {{ default .Values.env.jdbcUrl .Values.global.oracle.jdbc_url }}
+ 16| 
+ 17| ---
+ 18| 
+ 19| # ---------------------------------------------------------------------------
+ 20| # StatefulSet for Oracle XE
+ 21| # ---------------------------------------------------------------------------
+ 22| apiVersion: apps/v1
+ 23| kind: StatefulSet
+ 24| metadata:
+ 25|   name: {{ $fullName }}
+ 26|   namespace: {{ .Values.global.namespace }}
+ 27|   labels:
+ 28|     app: {{ $fullName }}
+ 29| spec:
+ 30|   serviceName: {{ $fullName }}
+ 31|   replicas: {{ .Values.replicaCount }}
+ 32|   selector:
+ 33|     matchLabels:
+ 34|       app: {{ $fullName }}
+ 35|   template:
+ 36|     metadata:
+ 37|       labels:
+ 38|         app: {{ $fullName }}
+ 39|     spec:
+ 40|       volumes:
+ 41|         - name: dshm
+ 42|           emptyDir:
+ 43|             medium: Memory
+ 44|             sizeLimit: 1Gi
+ 45|       containers:
+ 46|         - name: oracle
+ 47|           image: &quot;{{ .Values.image.repository }}:{{ .Values.image.tag }}&quot;
+ 48|           imagePullPolicy: {{ .Values.image.pullPolicy }}
+ 49|           env:
+ 50|             - name: ORACLE_PASSWORD
+ 51|               valueFrom:
+ 52|                 secretKeyRef:
+ 53|                   name: oracle-credentials
+ 54|                   key: ORACLE_PASSWORD
+ 55|             - name: APP_USER
+ 56|               valueFrom:
+ 57|                 secretKeyRef:
+ 58|                   name: oracle-credentials
+ 59|                   key: ORACLE_USER
+ 60|             - name: APP_USER_PASSWORD
+ 61|               valueFrom:
+ 62|                 secretKeyRef:
+ 63|                   name: oracle-credentials
+ 64|                   key: ORACLE_PASSWORD
+ 65|           ports:
+ 66|             - containerPort: {{ .Values.service.port }}
+ 67|               name: sql
+ 68|           resources:
+ 69|             {{- toYaml .Values.resources | nindent 12 }}
+ 70|           volumeMounts:
+ 71|             - name: oracle-data
+ 72|               mountPath: /opt/oracle/oradata
+ 73|             - name: dshm
+ 74|               mountPath: /dev/shm
+ 75|           
+ 76|           {{- if .Values.startupProbe.enabled }}
+ 77|           startupProbe:
+ 78|             tcpSocket:
+ 79|               port: {{ .Values.startupProbe.tcpSocket.port }}
+ 80|             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+ 81|             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+ 82|             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+ 83|           {{- end }}
+ 84| 
+ 85|           {{- if .Values.livenessProbe.enabled }}
+ 86|           livenessProbe:
+ 87|             tcpSocket:
+ 88|               port: {{ .Values.livenessProbe.tcpSocket.port }}
+ 89|             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+ 90|             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+ 91|             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+ 92|           {{- end }}
+ 93|   volumeClaimTemplates:
+ 94|     {{- if .Values.persistence.enabled }}
+ 95|     - metadata:
+ 96|         name: oracle-data
+ 97|       spec:
+ 98|         accessModes: {{ toYaml .Values.persistence.accessModes | nindent 8 }}
+ 99|         resources:
+100|           requests:
+101|             storage: {{ .Values.persistence.size }}
+102|         {{- if .Values.persistence.storageClass }}
+103|         storageClassName: {{ .Values.persistence.storageClass }}
+104|         {{- end }}
+105|     {{- else }}
+106|     - metadata:
+107|         name: oracle-data
+108|       spec:
+109|         accessModes: [&quot;ReadWriteOnce&quot;]
+110|         storageClassName: &quot;&quot;
+111|         resources:
+112|           requests:
+113|             storage: 1Gi
+114|     {{- end }}
+115| 
+116| ---
+117| 
+118| # ---------------------------------------------------------------------------
+119| # Service exposing Oracle port
+120| # ---------------------------------------------------------------------------
+121| apiVersion: v1
+122| kind: Service
+123| metadata:
+124|   name: {{ $fullName }}
+125|   namespace: {{ .Values.global.namespace }}
+126|   labels:
+127|     app: {{ $fullName }}
+128| spec:
+129|   type: {{ .Values.service.type }}
+130|   selector:
+131|     app: {{ $fullName }}
+132|   ports:
+133|     - name: sql
+134|       port: {{ .Values.service.port }}
+135|       targetPort: {{ .Values.service.port }}
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_43">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_43" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 6:</strong> Kubernetes API group/version for this object.</p>
+</li>
+<li>
+<p><strong>Line 7:</strong> The type of Kubernetes object (Deployment, Service, Ingress, etc.).</p>
+</li>
+<li>
+<p><strong>Line 8:</strong> Object metadata (name, namespace, labels, annotations).</p>
+</li>
+<li>
+<p><strong>Line 11:</strong> For Service/Secret/etc - specifies subtype (e.g., ClusterIP, LoadBalancer).</p>
+</li>
+<li>
+<p><strong>Line 22:</strong> Kubernetes API group/version for this object.</p>
+</li>
+<li>
+<p><strong>Line 23:</strong> The type of Kubernetes object (Deployment, Service, Ingress, etc.).</p>
+</li>
+<li>
+<p><strong>Line 24:</strong> Object metadata (name, namespace, labels, annotations).</p>
+</li>
+<li>
+<p><strong>Line 29:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 36:</strong> Object metadata (name, namespace, labels, annotations).</p>
+</li>
+<li>
+<p><strong>Line 39:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 40:</strong> Defines storage attached to the Pod (PVCs, config, secrets, etc.).</p>
+</li>
+<li>
+<p><strong>Line 45:</strong> List of containers that will run in the Pod.</p>
+</li>
+<li>
+<p><strong>Line 47:</strong> Container image reference to pull/run (repo/name:tag).</p>
+</li>
+<li>
+<p><strong>Line 49:</strong> Environment variables injected into the container.</p>
+</li>
+<li>
+<p><strong>Line 65:</strong> Ports exposed by the container or service.</p>
+</li>
+<li>
+<p><strong>Line 68:</strong> CPU/memory requests/limits for scheduling and isolation.</p>
+</li>
+<li>
+<p><strong>Line 70:</strong> Defines storage attached to the Pod (PVCs, config, secrets, etc.).</p>
+</li>
+<li>
+<p><strong>Line 97:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 99:</strong> CPU/memory requests/limits for scheduling and isolation.</p>
+</li>
+<li>
+<p><strong>Line 108:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 111:</strong> CPU/memory requests/limits for scheduling and isolation.</p>
+</li>
+<li>
+<p><strong>Line 121:</strong> Kubernetes API group/version for this object.</p>
+</li>
+<li>
+<p><strong>Line 122:</strong> The type of Kubernetes object (Deployment, Service, Ingress, etc.).</p>
+</li>
+<li>
+<p><strong>Line 123:</strong> Object metadata (name, namespace, labels, annotations).</p>
+</li>
+<li>
+<p><strong>Line 128:</strong> Desired state/specification for the object.</p>
+</li>
+<li>
+<p><strong>Line 129:</strong> For Service/Secret/etc - specifies subtype (e.g., ClusterIP, LoadBalancer).</p>
+</li>
+<li>
+<p><strong>Line 132:</strong> Ports exposed by the container or service.</p>
+</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformchartsoraclevaluesyaml"><code>helm/telemetry-platform/charts/oracle/values.yaml</code><a class="headerlink" href="#helmtelemetry-platformchartsoraclevaluesyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_44">What this file is for<a class="headerlink" href="#what-this-file-is-for_44" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Helm default values (your knobs).</li>
+</ul>
+<h3 id="file-contents-numbered_44">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_44" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| # Oracle subchart values (optimized and persistence-enabled)
+ 2| # These can be overridden by the parent telemetry-platform chart via .Values.global.oracle.*
+ 3| 
+ 4| replicaCount: 1
+ 5| 
+ 6| image:
+ 7|   repository: gvenzl/oracle-xe
+ 8|   tag: &quot;21-slim&quot;
+ 9|   pullPolicy: IfNotPresent
+10| 
+11| resources:
+12|   requests:
+13|     cpu: 500m
+14|     memory: 2Gi
+15|   limits:
+16|     cpu: 2
+17|     memory: 4Gi
+18| 
+19| service:
+20|   type: ClusterIP
+21|   port: 1521
+22| 
+23| persistence:
+24|   enabled: true               # persistence ON by default
+25|   size: 10Gi
+26|   storageClass: &quot;&quot;            # leave empty to use the cluster default
+27|   accessModes:
+28|     - ReadWriteOnce
+29|   existingClaim: &quot;&quot;           # reuse an existing PVC if provided
+30| 
+31| env:
+32|   # Mirrors global.oracle but allows local overrides for standalone use
+33|   user: telemetry
+34|   password: telemetry_pw
+35|   jdbcUrl: jdbc:oracle:thin:@oracle-db.telemetry.svc.cluster.local:1521/XEPDB1
+36| 
+37| labels: {}
+38| annotations: {}
+39| 
+40| livenessProbe:
+41|   enabled: true
+42|   tcpSocket:
+43|     port: 1521
+44|   initialDelaySeconds: 240      # give it 4 minutes on first start
+45|   periodSeconds: 15
+46|   failureThreshold: 10
+47| 
+48| startupProbe:
+49|   enabled: true
+50|   tcpSocket:
+51|     port: 1521
+52|   initialDelaySeconds: 60
+53|   periodSeconds: 15
+54|   failureThreshold: 40          # 60 + 15*40 = ~660s max, plenty for cold start
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_44">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_44" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Line 4:</strong> How many Pod replicas to run (Deployment replicas).</p>
+</li>
+<li>
+<p><strong>Line 6:</strong> Image configuration block (repository/name/tag/pullPolicy, depending on your chart).</p>
+</li>
+<li>
+<p><strong>Line 11:</strong> Default CPU/memory requests/limits for the chart.</p>
+</li>
+<li>
+<p><strong>Line 19:</strong> Kubernetes Service configuration (type, ports).</p>
+</li>
+</ul>
+<hr />
+<h2 id="helmtelemetry-platformvaluesyaml"><code>helm/telemetry-platform/values.yaml</code><a class="headerlink" href="#helmtelemetry-platformvaluesyaml" title="Permanent link">&para;</a></h2>
+<h3 id="what-this-file-is-for_45">What this file is for<a class="headerlink" href="#what-this-file-is-for_45" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Helm default values (your knobs).</li>
+</ul>
+<h3 id="file-contents-numbered_45">File contents (numbered)<a class="headerlink" href="#file-contents-numbered_45" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code> 1| global:
+ 2|   namespace: telemetry
+ 3|   oracle:
+ 4|     password: telemetry_pw
+ 5|     user: telemetry
+ 6|     jdbc_url: jdbc:oracle:thin:@oracle-db.telemetry.svc.cluster.local:1521/XEPDB1
+ 7| 
+ 8| agent-ingest-svc:
+ 9|   image: agent-ingest-svc:release1
+10|   replicas: 2
+11| 
+12| device-state-svc:
+13|   image: device-state-svc:release1
+14|   replicas: 1
+15|   containerPort: 8081
+16|   servicePort: 8080
+17| 
+18| ingress:
+19|   host: telemetry.internal
+</code></pre></div>
+<h3 id="line-by-line-explanation-only-lines-that-introduce-a-concept_45">Line-by-line explanation (only lines that introduce a concept)<a class="headerlink" href="#line-by-line-explanation-only-lines-that-introduce-a-concept_45" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Line 18:</strong> Ingress configuration (host/path/TLS/annotations).</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": [], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
