@@ -16,7 +16,7 @@ dependencies {
 inputs = {
   namespace = "telemetry"
 
-  chart_path = "${get_terragrunt_dir()}/../../../../helm/telemetry-platform"
+  chart_path = "${get_repo_root()}/helm/telemetry-platform"
   
   oracle_user     = "telemetry"
   oracle_password = "telemetry_pw"

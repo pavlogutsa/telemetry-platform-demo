@@ -5,3 +5,30 @@ agent-ingest-svc/build/*
 device-state-svc/build/*
 **/.terraform*
 **/.terragrunt*
+*.tgz
+*.tar.gz
+
+# --- telemetry-platform-demo cursor+infra ignores (BEGIN) ---
+# build outputs
+**/target/
+**/build/
+*.log
+
+# local env
+.env
+.env.*
+.DS_Store
+
+# terragrunt/terraform
+**/.terragrunt-cache/
+**/.terraform/
+**/.terraform.lock.hcl
+
+# kubernetes local artifacts
+kubeconfig
+*.kubeconfig
+
+# cursor local state (keep rules tracked)
+.cursor/*
+!.cursor/rules.md
+# --- telemetry-platform-demo cursor+infra ignores (BEGIN) ---
